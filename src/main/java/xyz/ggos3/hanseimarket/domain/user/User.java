@@ -2,18 +2,17 @@ package xyz.ggos3.hanseimarket.domain.user;
 
 import jakarta.persistence.*;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
+    private Long id;
     private String name;
     private String studentCode;
     private String phoneNumber;
-    private boolean isAlive = true;
 
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime createdDate;
@@ -38,9 +37,5 @@ public class User {
             case 'M' -> Class.메타버스게임과;
             default -> throw new IllegalStateException("학과 정보를 찾을 수 없습니다. 학과코드: " + getClassCode);
         };
-    }
-
-    public void disableUser() {
-        this.isAlive = false;
     }
 }
