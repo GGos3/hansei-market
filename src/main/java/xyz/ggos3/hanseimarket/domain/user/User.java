@@ -3,6 +3,7 @@ package xyz.ggos3.hanseimarket.domain.user;
 import jakarta.persistence.*;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Entity
 public class User {
@@ -14,8 +15,8 @@ public class User {
     private String phoneNumber;
     private boolean isAlive = true;
 
-    @Temporal(TemporalType.DATE)
-    private Date createdDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime createdDate;
 
     public User() {
     }
