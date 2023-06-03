@@ -1,6 +1,6 @@
 package xyz.ggos3.hanseimarket.domain.user;
 
-public enum Class {
+public enum SchoolClass {
     해킹보안과,
     네트워크보안과,
     게임과,
