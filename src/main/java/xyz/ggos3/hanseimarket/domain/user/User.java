@@ -1,11 +1,12 @@
 package xyz.ggos3.hanseimarket.domain.user;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
+@Getter
 public class User {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
