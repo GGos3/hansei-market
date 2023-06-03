@@ -1,4 +1,4 @@
-package xyz.ggos3.hanseimarket.domain.account;
+package xyz.ggos3.hanseimarket.domain.user.account;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
