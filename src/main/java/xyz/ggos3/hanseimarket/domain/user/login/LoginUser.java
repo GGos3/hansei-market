@@ -1,12 +1,14 @@
 package xyz.ggos3.hanseimarket.domain.user.login;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import xyz.ggos3.hanseimarket.domain.user.User;
 import xyz.ggos3.hanseimarket.domain.user.UserStatus;
 
 import java.util.UUID;
 
 @Entity
+@Getter
 public class LoginUser {
     @Id @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
