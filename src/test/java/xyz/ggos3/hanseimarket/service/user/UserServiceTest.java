@@ -33,11 +33,11 @@ class UserServiceTest {
 
         userService.createAccount(request);
 
-        User user = userRepository.findByUserId(request.getAccountId()).get();
-        LoginUser loginUser = loginUserRepository.findByLoginId(request.getAccountId()).get();
+        User user = userRepository.findByUserId(request.getUserId()).get();
+        LoginUser loginUser = loginUserRepository.findByLoginId(request.getUserId()).get();
 
         // 저장된 User의 Id 가 request의 Id와 같은지 검증
-        assertThat(user.getUserId()).isEqualTo(request.getAccountId());
+        assertThat(user.getUserId()).isEqualTo(request.getUserId());
         // 로그인 전용 User의 user필드가가 user의 id와 같은지 검증
         assertThat(loginUser.getUser().getId()).isEqualTo(user.getId());
     }
