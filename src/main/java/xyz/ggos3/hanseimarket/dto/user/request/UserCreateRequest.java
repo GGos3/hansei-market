@@ -7,9 +7,9 @@ import lombok.Getter;
 public class UserCreateRequest {
 
     @NotNull
-    private final String accountId;
+    private final String userId;
     @NotNull
-    private final String accountPassword;
+    private final String userPassword;
     @NotNull
     private final String name;
     @NotNull
@@ -17,9 +17,9 @@ public class UserCreateRequest {
     @NotNull
     private final String phoneNumber;
 
-    public UserCreateRequest(String accountId, String accountPassword, String name, String studentCode, String phoneNumber) {
-        this.accountId = accountId;
-        this.accountPassword = accountPassword;
+    public UserCreateRequest(String userId, String userPassword, String name, String studentCode, String phoneNumber) {
+        this.userId = userId;
+        this.userPassword = userPassword;
         this.name = name;
         this.studentCode = studentCode;
         this.phoneNumber = phoneNumber;
