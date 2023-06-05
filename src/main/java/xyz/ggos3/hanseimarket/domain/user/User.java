@@ -5,6 +5,7 @@ import lombok.Getter;
 import xyz.ggos3.hanseimarket.domain.item.Item;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,7 +21,7 @@ public class User {
     private String studentCode;
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Item> userItem;
 
     @Enumerated(EnumType.STRING)
