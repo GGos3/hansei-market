@@ -2,8 +2,10 @@ package xyz.ggos3.hanseimarket.domain.user;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import xyz.ggos3.hanseimarket.domain.item.Item;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -17,6 +19,9 @@ public class User {
     private String name;
     private String studentCode;
     private String phoneNumber;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Item> userItem;
 
     @Enumerated(EnumType.STRING)
     private UserStatus status = UserStatus.enable;
