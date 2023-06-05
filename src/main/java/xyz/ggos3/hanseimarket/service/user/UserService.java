@@ -22,8 +22,8 @@ public class UserService {
     @Transactional
     public void createAccount(UserCreateRequest request) {
         User newUser = new User(
-                request.getAccountId(),
-                request.getAccountPassword(),
+                request.getUserId(),
+                request.getUserPassword(),
                 request.getName(),
                 request.getStudentCode(),
                 request.getPhoneNumber()
@@ -37,7 +37,7 @@ public class UserService {
     }
 
     @Transactional
-    public User findUserByAccountId(String accountId) {
+    public User findUserByUserId(String accountId) {
         return userRepository.findByUserId(accountId)
                 .orElseThrow(() -> new IllegalArgumentException("잘못된 id 입니다."));
     }
