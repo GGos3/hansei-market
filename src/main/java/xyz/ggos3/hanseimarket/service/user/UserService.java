@@ -39,7 +39,7 @@ public class UserService {
     @Transactional
     public User findUserByUserId(String accountId) {
         return userRepository.findByUserId(accountId)
-                .orElseThrow(() -> new IllegalArgumentException("잘못된 id 입니다."));
+                .orElseThrow(() -> new IllegalArgumentException("id에 맞는 User가 없습니다."));
     }
 
     private void validateLoginId(User user) {
