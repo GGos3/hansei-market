@@ -37,14 +37,20 @@ public class ItemService {
 
     @Transactional
     public Item findItemById(Long id) {
-        return itemRepository.findById(id)
+        Item findItem = itemRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("id에 맞는 item이 없습니다."));
+        findItem.viewCount();
+
+        return findItem;
     }
 
     @Transactional
     public Item findItemByUserId(String userId) {
         User userByUserId = userService.findUserByUserId(userId);
-        return itemRepository.findByUser(userByUserId)
-                .orElseThrow(() -> new IllegalArgumentException("유저 Id에 맞는 item이 없습니다."));
+        Item item = itemRepository.findByUser(userByUserId)
+                .orElseThrow(() -> new IllegalArgumentException("유저 id에 맞는 item이 없습니다."));
+        item.viewCount();
+
+        return item;
     }
 }
