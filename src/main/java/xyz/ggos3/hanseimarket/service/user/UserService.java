@@ -37,16 +37,32 @@ public class UserService {
     }
 
     @Transactional
-    public User findUserByUserId(String accountId) {
-        return userRepository.findByUserId(accountId)
+    public User findUserByUserId(String userId) {
+        return userRepository.findByUserId(userId)
+                .filter(user -> user.getStatus().equals(UserStatus.enable))
                 .orElseThrow(() -> new IllegalArgumentException("id에 맞는 User가 없습니다."));
+    }
+
+    @Transactional
+    public void disableUser(String userId) {
+        findUserByUserId(userId).disable();
+    }
+
+    @Transactional
+    public void enableUser(String userId) {
+        findUserByUserId(userId).enable();
+    }
+
+    @Transactional
+    public void deleteUserById(String userId) {
+        userRepository.deleteUserByUserId(userId);
     }
 
     private void validateLoginId(User user) {
         userRepository.findByUserId(user.getUserId())
                 .filter(a -> a.getStatus().equals(UserStatus.enable))
-                .ifPresent(account -> {
-                    throw new IllegalArgumentException("이미 존재하는 아이디입니다.");
+                .ifPresent(a -> {
+                    throw new IllegalArgumentException("이미 존재하는 ID입니다");
                 });
     }
 }
