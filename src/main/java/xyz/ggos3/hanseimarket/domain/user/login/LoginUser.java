@@ -14,12 +14,14 @@ public class LoginUser {
     private UUID uuid;
 
     @OneToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "id")
     private User user;
 
     private String loginId;
 
     private String password;
+
+    private String role = "ROLE_USER";
 
     @Enumerated(EnumType.STRING)
     private UserStatus status;
