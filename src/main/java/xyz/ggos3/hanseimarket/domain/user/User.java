@@ -2,10 +2,10 @@ package xyz.ggos3.hanseimarket.domain.user;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import org.hibernate.annotations.CreationTimestamp;
 import xyz.ggos3.hanseimarket.domain.item.Item;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
@@ -27,8 +27,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserStatus status = UserStatus.enable;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime createdDate;
+    @CreationTimestamp
+    private Timestamp createdDate;
 
     public User() {
     }
@@ -43,6 +43,10 @@ public class User {
 
     public void disable() {
         this.status = UserStatus.disable;
+    }
+
+    public void enable() {
+        this.status = UserStatus.enable;
     }
 
     public SchoolClass getStudentClass() {
