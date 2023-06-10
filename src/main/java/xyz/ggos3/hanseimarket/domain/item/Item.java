@@ -2,9 +2,10 @@ package xyz.ggos3.hanseimarket.domain.item;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import org.hibernate.annotations.CreationTimestamp;
 import xyz.ggos3.hanseimarket.domain.user.User;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 @Entity
 @Getter
@@ -20,9 +21,11 @@ public class Item {
     private String description;
     private int likeCount = 0;
     private int price = 0;
+    private int view = 0;
+    private ItemStatus status = ItemStatus.판매중;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime createdDate;
+    @CreationTimestamp
+    private Timestamp createdDate;
 
     public Item() {
     }
@@ -35,6 +38,10 @@ public class Item {
     }
 
     public void sumLike() {
-        this.likeCount =+ 1;
+        this.likeCount++;
+    }
+
+    public void viewCount() {
+        this.view++;
     }
 }
