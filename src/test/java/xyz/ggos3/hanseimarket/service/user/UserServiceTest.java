@@ -1,6 +1,7 @@
 package xyz.ggos3.hanseimarket.service.user;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,15 @@ class UserServiceTest {
         assertThat(loginUser.getUser().getId()).isEqualTo(user.getId());
     }
 
+    @Test()
+    @DisplayName("중복 유저 검증")
+    void validateCreateUserTest() {
+        UserCreateRequest request = new UserCreateRequest("test123", "testPass1234", "test", "H1111", "01011111111");
+
+        userService.createAccount(request);
+
+        Assertions.assertThrows(IllegalArgumentException.class, () -> userService.createAccount(request));
+    }
 
     @Test
     @DisplayName("유저 비활성화")
