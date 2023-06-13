@@ -45,12 +45,12 @@ public class UserService {
 
     @Transactional
     public void disableUser(String userId) {
-        findUserByUserId(userId).disable();
+        userRepository.updateUserStatus(findUserByUserId(userId).getId(), UserStatus.disable);
     }
 
     @Transactional
     public void enableUser(String userId) {
-        findUserByUserId(userId).enable();
+        userRepository.updateUserStatus(findUserByUserId(userId).getId(), UserStatus.enable);
     }
 
     @Transactional
