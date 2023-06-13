@@ -21,8 +21,8 @@ public class User {
     private String studentCode;
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<Item> userItem;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Item> userItems;
 
     @Enumerated(EnumType.STRING)
     private UserStatus status = UserStatus.enable;
