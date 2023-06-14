@@ -13,6 +13,6 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     Optional<Item> findByUser(User user);
 
     @Modifying(clearAutomatically = true)
-    @Query("UPDATE Item i SET i.itemName = :itemName , i.price = :price, i.description = :description WHERE i.id =: id")
+    @Query("UPDATE Item i SET i.itemName = :itemName , i.price = :price, i.description = :description WHERE i.id = :id")
     void updateItem(Long id, String itemName, int price, String description);
 }
