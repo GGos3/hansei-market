@@ -10,6 +10,8 @@ import xyz.ggos3.hanseimarket.dto.item.request.ItemSaveRequest;
 import xyz.ggos3.hanseimarket.dto.item.request.ItemUpdateRequest;
 import xyz.ggos3.hanseimarket.service.user.UserService;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ItemService {
@@ -63,5 +65,10 @@ public class ItemService {
         item.viewCount();
 
         return item;
+    }
+
+    @Transactional
+    public List<Item> findAll() {
+        return itemRepository.findAll();
     }
 }
