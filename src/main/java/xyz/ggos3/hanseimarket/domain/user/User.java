@@ -7,6 +7,7 @@ import xyz.ggos3.hanseimarket.domain.item.Item;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Entity
 @Getter
@@ -20,6 +21,7 @@ public class User {
     private String name;
     private String studentCode;
     private String phoneNumber;
+    private int tradeCount = 0;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Item> userItems;
@@ -47,6 +49,10 @@ public class User {
 
     public void enable() {
         this.status = UserStatus.enable;
+    }
+
+    public void increaseTradeCount() {
+        ++this.tradeCount;
     }
 
     public SchoolClass getStudentClass() {
