@@ -10,6 +10,7 @@ import xyz.ggos3.hanseimarket.domain.user.UserStatus;
 import xyz.ggos3.hanseimarket.domain.user.login.LoginUser;
 import xyz.ggos3.hanseimarket.domain.user.login.LoginUserRepository;
 import xyz.ggos3.hanseimarket.dto.user.request.UserCreateRequest;
+import xyz.ggos3.hanseimarket.dto.user.response.UserInfoResponse;
 
 @Service
 @Slf4j
@@ -34,6 +35,19 @@ public class UserService {
 
         userRepository.save(newUser);
         loginUserRepository.save(newLoginUser);
+    }
+
+    @Transactional
+    public UserInfoResponse findUser(String userId) {
+        User user = findUserByUserId(userId);
+        return new UserInfoResponse(
+                user.getName(),
+                user.getStudentCode(),
+                user.getPhoneNumber(),
+                user.getStatus(),
+                user.getTradeCount(),
+                user.getCreatedDate()
+        );
     }
 
     @Transactional
