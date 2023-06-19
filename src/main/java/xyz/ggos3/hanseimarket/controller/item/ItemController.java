@@ -28,6 +28,14 @@ public class ItemController {
         return itemService.findItemById(id);
     }
 
+    @PatchMapping("/item/{id}")
+    public Item increaseLike(@PathVariable Long id) {
+        Item item = itemService.findItemById(id);
+        item.increaseLike();
+
+        return item;
+    }
+
     @PostMapping("/item/all")
     public List<Item> getAllItem() {
         return itemService.findAll();
