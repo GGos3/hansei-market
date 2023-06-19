@@ -40,8 +40,8 @@ class ItemServiceTest {
     @AfterEach
     void clear() {
         loginUserRepository.deleteAll();
-        userRepository.deleteAll();
         itemRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test
@@ -75,7 +75,7 @@ class ItemServiceTest {
     @DisplayName("상품 수정")
     void updateItemTest() {
         ItemSaveRequest itemSaveRequest = new ItemSaveRequest("test123", "가방", 1000,"2023년도에 구매한 가방입니다");
-        ItemUpdateRequest itemUpdateRequest = new ItemUpdateRequest(3L, "모자", 1500, "멋진 모자!");
+        ItemUpdateRequest itemUpdateRequest = new ItemUpdateRequest(3L, "test123", "모자", 1500, "멋진 모자!");
 
         itemService.saveItem(itemSaveRequest);
         itemService.updateItem(itemUpdateRequest);
