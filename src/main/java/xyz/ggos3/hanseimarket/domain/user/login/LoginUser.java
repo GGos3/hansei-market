@@ -13,7 +13,7 @@ public class LoginUser {
     @Id @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 

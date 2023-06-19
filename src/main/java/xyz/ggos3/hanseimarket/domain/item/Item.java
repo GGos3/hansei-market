@@ -13,7 +13,7 @@ public class Item {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -37,7 +37,7 @@ public class Item {
         this.description = description;
     }
 
-    public void sumLike() {
+    public void increaseLike() {
         this.likeCount++;
     }
 
