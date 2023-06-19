@@ -2,6 +2,7 @@ package xyz.ggos3.hanseimarket.service.item;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import xyz.ggos3.hanseimarket.domain.item.Item;
 import xyz.ggos3.hanseimarket.domain.item.ItemRepository;
@@ -12,6 +13,7 @@ import xyz.ggos3.hanseimarket.service.user.UserService;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ItemService {
@@ -22,6 +24,7 @@ public class ItemService {
     @Transactional
     public void saveItem(ItemSaveRequest request) {
         User requestUser = userService.findUserByUserId(request.getUserId());
+
         Item newItem = new Item(
                 requestUser,
                 request.getItemName(),
@@ -34,7 +37,11 @@ public class ItemService {
 
     @Transactional
     public void updateItem(ItemUpdateRequest request) {
-        Item item = findItemById(request.getId());
+        String userId = findItemById(request.getId()).getUser().getUserId();
+
+        if (!userId.equals(request.getUserId()))
+            throw new IllegalArgumentException("게시글 수정은 본인만 할 수 있습니다.");
+
         itemRepository.updateItem(
                 request.getId(),
                 request.getItemName(),
@@ -65,6 +72,12 @@ public class ItemService {
         item.viewCount();
 
         return item;
+    }
+
+    @Transactional
+    public void deleteItemById(Long id) {
+        findItemById(id);
+        itemRepository.deleteById(id);
     }
 
     @Transactional
