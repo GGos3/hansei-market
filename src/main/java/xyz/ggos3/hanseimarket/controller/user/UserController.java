@@ -1,7 +1,6 @@
 package xyz.ggos3.hanseimarket.controller.user;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,11 +16,18 @@ public class UserController {
 
     private final UserService userService;
 
+    @PostMapping("/user/validate")
+    public ResponseEntity<?> validateUserId(@RequestBody String userId) {
+        userService.validateUserId(userId);
+
+        return ResponseEntity.ok().build();
+    }
+
     @PostMapping("/user/register")
     public ResponseEntity<User> createUser(@RequestBody UserCreateRequest request) {
         userService.createAccount(request);
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/user/info")
