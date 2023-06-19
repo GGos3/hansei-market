@@ -31,7 +31,7 @@ public class UserService {
         );
         LoginUser newLoginUser = new LoginUser(newUser);
 
-        validateLoginId(newUser);
+        validateUser(newUser);
 
         userRepository.save(newUser);
         loginUserRepository.save(newLoginUser);
@@ -72,11 +72,19 @@ public class UserService {
         userRepository.deleteUserByUserId(userId);
     }
 
-    private void validateLoginId(User user) {
+    @Transactional
+    public void validateUser(User user) {
         userRepository.findByUserId(user.getUserId())
                 .filter(a -> a.getStatus().equals(UserStatus.enable))
                 .ifPresent(a -> {
-                    throw new IllegalArgumentException("이미 존재하는 ID입니다");
+                    throw new IllegalArgumentException("이미 존재하는 ID 입니다");
                 });
+    }
+
+    @Transactional
+    public boolean validateUserId(String userId) {
+        return userRepository.findByUserId(userId)
+                .filter(a -> a.getStatus().equals(UserStatus.enable))
+                .isEmpty();
     }
 }
