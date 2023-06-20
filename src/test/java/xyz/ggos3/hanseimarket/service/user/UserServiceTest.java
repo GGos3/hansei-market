@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import xyz.ggos3.hanseimarket.domain.user.User;
 import xyz.ggos3.hanseimarket.domain.user.UserRepository;
 import xyz.ggos3.hanseimarket.domain.user.UserStatus;
@@ -21,12 +22,14 @@ class UserServiceTest {
     private final UserService userService;
     private final UserRepository userRepository;
     private final LoginUserRepository loginUserRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceTest(UserService userService, UserRepository userRepository, LoginUserRepository loginUserRepository) {
+    public UserServiceTest(UserService userService, UserRepository userRepository, LoginUserRepository loginUserRepository, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.userRepository = userRepository;
         this.loginUserRepository = loginUserRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @AfterEach
@@ -49,6 +52,18 @@ class UserServiceTest {
         assertThat(user.getUserId()).isEqualTo(request.getUserId());
         // 로그인 전용 User의 user필드가가 user의 id와 같은지 검증
         assertThat(loginUser.getUser().getId()).isEqualTo(user.getId());
+    }
+
+    @Test
+    @DisplayName("유저 비밀번호 암호화")
+    void userPasswordEncodeTest() {
+        UserCreateRequest request = new UserCreateRequest("test123", "testPass1234", "test", "H1111", "01011111111");
+
+        User user = userService.createAccount(request);
+
+        User findUser = userService.findUser(user.getUserId());
+
+        assertThat(passwordEncoder.matches(request.getUserPassword(), findUser.getUserPassword())).isEqualTo(true);
     }
 
     @Test()
