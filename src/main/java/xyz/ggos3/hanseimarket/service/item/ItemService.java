@@ -22,8 +22,8 @@ public class ItemService {
     private final UserService userService;
 
     @Transactional
-    public void saveItem(ItemSaveRequest request) {
-        User requestUser = userService.findUserByUserId(request.getUserId());
+    public Item saveItem(ItemSaveRequest request) {
+        User requestUser = userService.findUser(request.getUserId());
 
         Item newItem = new Item(
                 requestUser,
@@ -32,7 +32,7 @@ public class ItemService {
                 request.getDescription()
         );
 
-        itemRepository.save(newItem);
+        return itemRepository.save(newItem);
     }
 
     @Transactional
@@ -66,7 +66,7 @@ public class ItemService {
 
     @Transactional
     public Item findItemByUserId(String userId) {
-        User userByUserId = userService.findUserByUserId(userId);
+        User userByUserId = userService.findUser(userId);
         Item item = itemRepository.findByUser(userByUserId)
                 .orElseThrow(() -> new IllegalArgumentException("유저 id에 맞는 item이 없습니다."));
         item.viewCount();
