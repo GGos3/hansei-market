@@ -3,6 +3,7 @@ package xyz.ggos3.hanseimarket.service.item;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import xyz.ggos3.hanseimarket.domain.item.Item;
 import xyz.ggos3.hanseimarket.domain.item.ItemRepository;
 import xyz.ggos3.hanseimarket.domain.user.UserRepository;
 import xyz.ggos3.hanseimarket.domain.user.login.LoginUserRepository;
@@ -14,7 +15,6 @@ import xyz.ggos3.hanseimarket.service.user.UserService;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ItemServiceTest {
     private final ItemService itemService;
     private final UserService userService;
@@ -31,11 +31,6 @@ class ItemServiceTest {
         this.loginUserRepository = loginUserRepository;
     }
 
-    @BeforeEach
-    void createUser() {
-        UserCreateRequest userCreateRequest = new UserCreateRequest("test123", "testPassword", "테스트유저", "H1231", "01011111111");
-        userService.createAccount(userCreateRequest);
-    }
 
     @AfterEach
     void clear() {
@@ -45,41 +40,44 @@ class ItemServiceTest {
     }
 
     @Test
-    @Order(1)
     @DisplayName("item 생성")
     void createItemTest() {
         ItemSaveRequest itemSaveRequest = new ItemSaveRequest("test123", "가방", 1000,"2023년도에 구매한 가방입니다");
+        UserCreateRequest userCreateRequest = new UserCreateRequest("test123", "testPassword", "테스트유저", "H1231", "01011111111");
+        userService.createAccount(userCreateRequest);
 
-        itemService.saveItem(itemSaveRequest);
+        Item item = itemService.saveItem(itemSaveRequest);
 
-        assertThat(itemRepository.findAll().stream()
-                .filter(item -> item.getItemName().equals("가방"))
-                .findFirst().get().getItemName()).isEqualTo("가방");
+        assertThat(item.getUser().getUserId()).isEqualTo(itemSaveRequest.getUserId());
+        assertThat(item.getItemName()).isEqualTo(itemSaveRequest.getItemName());
+        assertThat(item.getPrice()).isEqualTo(itemSaveRequest.getPrice());
+        assertThat(item.getDescription()).isEqualTo(itemSaveRequest.getDescription());
     }
 
     @Test
-    @Order(2)
     @DisplayName("조회수 카운트")
     void itemViewCountTest() {
+        UserCreateRequest userCreateRequest = new UserCreateRequest("test123", "testPassword", "테스트유저", "H1231", "01011111111");
         ItemSaveRequest itemSaveRequest = new ItemSaveRequest("test123", "가방", 1000,"2023년도에 구매한 가방입니다");
+        userService.createAccount(userCreateRequest);
+        Item item = itemService.saveItem(itemSaveRequest);
 
-        itemService.saveItem(itemSaveRequest);
+        Item findItem = itemService.findItemById(item.getId());
 
-        itemService.findItemById(2L);
-
-        assertThat(itemRepository.findAll().get(0).getView()).isEqualTo(1);
+        assertThat(findItem.getView()).isEqualTo(1);
     }
 
     @Test
-    @Order(3)
     @DisplayName("상품 수정")
     void updateItemTest() {
+        UserCreateRequest userCreateRequest = new UserCreateRequest("test123", "testPassword", "테스트유저", "H1231", "01011111111");
         ItemSaveRequest itemSaveRequest = new ItemSaveRequest("test123", "가방", 1000,"2023년도에 구매한 가방입니다");
-        ItemUpdateRequest itemUpdateRequest = new ItemUpdateRequest(3L, "test123", "모자", 1500, "멋진 모자!");
+        userService.createAccount(userCreateRequest);
+        Item item = itemService.saveItem(itemSaveRequest);
+        ItemUpdateRequest itemUpdateRequest = new ItemUpdateRequest(item.getId(), "test123", "모자", 1500, "멋진 모자!");
 
-        itemService.saveItem(itemSaveRequest);
         itemService.updateItem(itemUpdateRequest);
 
-        assertThat(itemService.findItemById(3L).getItemName()).isEqualTo("모자");
+        assertThat(itemService.findItemById(item.getId()).getItemName()).isEqualTo("모자");
     }
 }
