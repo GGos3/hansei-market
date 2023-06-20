@@ -21,7 +21,7 @@ public class UserService {
     private final LoginUserRepository loginUserRepository;
 
     @Transactional
-    public void createAccount(UserCreateRequest request) {
+    public User createAccount(UserCreateRequest request) {
         User newUser = new User(
                 request.getUserId(),
                 request.getUserPassword(),
@@ -31,27 +31,20 @@ public class UserService {
         );
         LoginUser newLoginUser = new LoginUser(newUser);
 
-        validateUser(newUser);
+        validateUser(newUser.getUserId());
 
-        userRepository.save(newUser);
         loginUserRepository.save(newLoginUser);
+        return userRepository.save(newUser);
     }
 
     @Transactional
-    public UserInfoResponse findUser(String userId) {
-        User user = findUserByUserId(userId);
-        return new UserInfoResponse(
-                user.getName(),
-                user.getStudentCode(),
-                user.getPhoneNumber(),
-                user.getStatus(),
-                user.getTradeCount(),
-                user.getCreatedDate()
-        );
+    public UserInfoResponse findUserInfo(String userId) {
+        User user = findUser(userId);
+        return new UserInfoResponse(user);
     }
 
     @Transactional
-    public User findUserByUserId(String userId) {
+    public User findUser(String userId) {
         return userRepository.findByUserId(userId)
                 .filter(user -> user.getStatus().equals(UserStatus.enable))
                 .orElseThrow(() -> new IllegalArgumentException("id에 맞는 User가 없습니다."));
@@ -59,12 +52,12 @@ public class UserService {
 
     @Transactional
     public void disableUser(String userId) {
-        userRepository.updateUserStatus(findUserByUserId(userId).getId(), UserStatus.disable);
+        userRepository.updateUserStatus(findUser(userId).getId(), UserStatus.disable);
     }
 
     @Transactional
     public void enableUser(String userId) {
-        userRepository.updateUserStatus(findUserByUserId(userId).getId(), UserStatus.enable);
+        userRepository.updateUserStatus(findUser(userId).getId(), UserStatus.enable);
     }
 
     @Transactional
@@ -73,18 +66,11 @@ public class UserService {
     }
 
     @Transactional
-    public void validateUser(User user) {
-        userRepository.findByUserId(user.getUserId())
+    public void validateUser(String userId) {
+        userRepository.findByUserId(userId)
                 .filter(a -> a.getStatus().equals(UserStatus.enable))
                 .ifPresent(a -> {
                     throw new IllegalArgumentException("이미 존재하는 ID 입니다");
                 });
-    }
-
-    @Transactional
-    public boolean validateUserId(String userId) {
-        return userRepository.findByUserId(userId)
-                .filter(a -> a.getStatus().equals(UserStatus.enable))
-                .isEmpty();
     }
 }
