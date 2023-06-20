@@ -18,7 +18,7 @@ public class UserController {
 
     @PostMapping("/user/validate")
     public ResponseEntity<?> validateUserId(@RequestBody String userId) {
-        userService.validateUserId(userId);
+        userService.validateUser(userId);
 
         return ResponseEntity.ok().build();
     }
@@ -32,6 +32,6 @@ public class UserController {
 
     @PostMapping("/user/info")
     public UserInfoResponse showUserInfo(@RequestBody String userId) {
-        return userService.findUser(userId);
+        return userService.findUserInfo(userId);
     }
 }
