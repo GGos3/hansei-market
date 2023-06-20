@@ -8,6 +8,7 @@ import xyz.ggos3.hanseimarket.domain.item.Item;
 import xyz.ggos3.hanseimarket.domain.item.ItemRepository;
 import xyz.ggos3.hanseimarket.domain.user.User;
 import xyz.ggos3.hanseimarket.dto.item.request.ItemSaveRequest;
+import xyz.ggos3.hanseimarket.dto.item.request.ItemStatusUpdateRequest;
 import xyz.ggos3.hanseimarket.dto.item.request.ItemUpdateRequest;
 import xyz.ggos3.hanseimarket.service.user.UserService;
 
@@ -47,6 +48,15 @@ public class ItemService {
                 request.getItemName(),
                 request.getPrice(),
                 request.getDescription());
+    }
+
+    @Transactional
+    public Item updateStatus(ItemStatusUpdateRequest request) {
+        Long id = findItemById(request.getId()).getId();
+
+        itemRepository.updateStatus(id, request.getStatus());
+
+        return findItemById(id);
     }
 
     @Transactional
