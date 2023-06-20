@@ -1,6 +1,7 @@
 package xyz.ggos3.hanseimarket.dto.user.response;
 
 import lombok.Getter;
+import xyz.ggos3.hanseimarket.domain.user.User;
 import xyz.ggos3.hanseimarket.domain.user.UserStatus;
 
 import java.sql.Timestamp;
@@ -14,12 +15,11 @@ public class UserInfoResponse {
     private int tradeCount;
     private Timestamp createdDate;
 
-    public UserInfoResponse(String name, String studentCode, String phoneNumber, UserStatus status, int tradeCount, Timestamp createdDate) {
-        this.name = name;
-        this.studentCode = studentCode;
-        this.phoneNumber = phoneNumber;
-        this.status = status;
-        this.tradeCount = tradeCount;
-        this.createdDate = createdDate;
+    public UserInfoResponse(User user) {
+        this.name = user.getName();
+        this.studentCode = user.getStudentCode();
+        this.phoneNumber = user.getPhoneNumber();
+        this.status = user.getStatus();
+        this.tradeCount = user.getTradeCount();
     }
 }
