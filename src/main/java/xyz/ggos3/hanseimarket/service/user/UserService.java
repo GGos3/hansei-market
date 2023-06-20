@@ -3,6 +3,7 @@ package xyz.ggos3.hanseimarket.service.user;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import xyz.ggos3.hanseimarket.domain.user.User;
 import xyz.ggos3.hanseimarket.domain.user.UserRepository;
@@ -19,12 +20,13 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final LoginUserRepository loginUserRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public User createAccount(UserCreateRequest request) {
         User newUser = new User(
                 request.getUserId(),
-                request.getUserPassword(),
+                passwordEncoder.encode(request.getUserPassword()),
                 request.getName(),
                 request.getStudentCode(),
                 request.getPhoneNumber()
