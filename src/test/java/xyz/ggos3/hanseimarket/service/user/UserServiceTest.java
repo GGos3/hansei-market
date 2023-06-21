@@ -46,7 +46,7 @@ class UserServiceTest {
         userService.createAccount(request);
 
         User user = userRepository.findByUserId(request.getUserId()).get();
-        LoginUser loginUser = loginUserRepository.findByLoginId(request.getUserId()).get();
+        LoginUser loginUser = loginUserRepository.findByUserId(request.getUserId()).get();
 
         // 저장된 User의 Id 가 request의 Id와 같은지 검증
         assertThat(user.getUserId()).isEqualTo(request.getUserId());
