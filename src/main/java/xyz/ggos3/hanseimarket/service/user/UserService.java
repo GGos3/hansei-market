@@ -35,6 +35,7 @@ public class UserService {
 
         validateUser(newUser.getUserId());
 
+        log.info("New User = {}", request.getUserId());
         loginUserRepository.save(newLoginUser);
         return userRepository.save(newUser);
     }
