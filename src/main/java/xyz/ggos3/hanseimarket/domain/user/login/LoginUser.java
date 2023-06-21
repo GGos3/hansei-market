@@ -14,14 +14,15 @@ public class LoginUser {
     private UUID uuid;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_deteil_id")
     private User user;
 
-    private String loginId;
+    private String userId;
 
     private String password;
 
-    private String role = "ROLE_USER";
+    @Enumerated(EnumType.STRING)
+    private UserType userType;
 
     @Enumerated(EnumType.STRING)
     private UserStatus status;
@@ -31,7 +32,7 @@ public class LoginUser {
 
     public LoginUser(User user) {
         this.user = user;
-        this.loginId = user.getUserId();
+        this.userId = user.getUserId();
         this.password = user.getUserPassword();
         this.status = user.getStatus();
     }
