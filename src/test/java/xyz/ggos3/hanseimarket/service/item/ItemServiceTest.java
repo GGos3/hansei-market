@@ -6,6 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import xyz.ggos3.hanseimarket.domain.item.Item;
 import xyz.ggos3.hanseimarket.domain.item.ItemRepository;
 import xyz.ggos3.hanseimarket.domain.item.ItemStatus;
+import xyz.ggos3.hanseimarket.domain.user.User;
 import xyz.ggos3.hanseimarket.domain.user.UserRepository;
 import xyz.ggos3.hanseimarket.domain.user.auth.AuthUserRepository;
 import xyz.ggos3.hanseimarket.dto.item.request.ItemSaveRequest;
@@ -45,16 +46,16 @@ class ItemServiceTest {
     @DisplayName("item 생성")
     void createItemTest() {
         // given
-        ItemSaveRequest itemSaveRequest = new ItemSaveRequest("test123", "가방", 1000,"2023년도에 구매한 가방입니다");
-        SignUpRequest signUPREquest = new SignUpRequest("test123", "testPassword", "테스트유저", "H1231", "01011111111");
-        userService.createAccount(signUPREquest);
+        ItemSaveRequest itemSaveRequest = new ItemSaveRequest("가방", 1000,"2023년도에 구매한 가방입니다");
+        SignUpRequest signUpRequest = new SignUpRequest("test123", "testPassword", "테스트유저", "H1231", "01011111111");
+        User user = userService.createAccount(signUpRequest);
 
         // when
-        Item item = itemService.saveItem(itemSaveRequest);
+        Item item = itemService.saveItem(user.getUserId(), itemSaveRequest);
 
 
         // then
-        assertThat(item.getUser().getUserId()).isEqualTo(itemSaveRequest.userId());
+        assertThat(item.getUser().getUserId()).isEqualTo(user.getUserId());
         assertThat(item.getItemName()).isEqualTo(itemSaveRequest.itemName());
         assertThat(item.getPrice()).isEqualTo(itemSaveRequest.price());
         assertThat(item.getDescription()).isEqualTo(itemSaveRequest.description());
@@ -65,9 +66,9 @@ class ItemServiceTest {
     void itemViewCountTest() {
         // given
         SignUpRequest signUPREquest = new SignUpRequest("test123", "testPassword", "테스트유저", "H1231", "01011111111");
-        ItemSaveRequest itemSaveRequest = new ItemSaveRequest("test123", "가방", 1000,"2023년도에 구매한 가방입니다");
-        userService.createAccount(signUPREquest);
-        Item item = itemService.saveItem(itemSaveRequest);
+        ItemSaveRequest itemSaveRequest = new ItemSaveRequest("가방", 1000,"2023년도에 구매한 가방입니다");
+        User user = userService.createAccount(signUPREquest);
+        Item item = itemService.saveItem(user.getUserId(), itemSaveRequest);
 
         // when
         Item findItem = itemService.findItemById(item.getId());
@@ -81,15 +82,15 @@ class ItemServiceTest {
     void updateStatusTest() {
         // given
         SignUpRequest signUpRequest = new SignUpRequest("test123", "testPassword", "테스트유저", "H1231", "010111111111");
-        ItemSaveRequest itemSaveRequest = new ItemSaveRequest("test123", "양말", 30000, "나이키 로고가 반대로 되어있는 중국산 나이크 양말");
+        ItemSaveRequest itemSaveRequest = new ItemSaveRequest("양말", 30000, "나이키 로고가 반대로 되어있는 중국산 나이크 양말");
 
-        userService.createAccount(signUpRequest);
-        Item item = itemService.saveItem(itemSaveRequest);
+        User user = userService.createAccount(signUpRequest);
+        Item item = itemService.saveItem(user.getUserId(), itemSaveRequest);
 
-        ItemStatusUpdateRequest itemStatusUpdateRequest = new ItemStatusUpdateRequest(item.getId(), ItemStatus.거래완료);
+        ItemStatusUpdateRequest itemStatusUpdateRequest = new ItemStatusUpdateRequest(ItemStatus.거래완료);
 
         // when
-        itemService.updateStatus(itemStatusUpdateRequest);
+        itemService.updateStatus(user.getUserId(), item.getId(), itemStatusUpdateRequest);
 
         // then
         assertThat(itemService.findItemById(item.getId()).getStatus()).isEqualTo(ItemStatus.거래완료);
@@ -98,13 +99,13 @@ class ItemServiceTest {
     @Test
     @DisplayName("상품 수정")
     void updateItemTest() {
-        SignUpRequest signUPREquest = new SignUpRequest("test123", "testPassword", "테스트유저", "H1231", "01011111111");
-        ItemSaveRequest itemSaveRequest = new ItemSaveRequest("test123", "가방", 1000,"2023년도에 구매한 가방입니다");
-        userService.createAccount(signUPREquest);
-        Item item = itemService.saveItem(itemSaveRequest);
-        ItemUpdateRequest itemUpdateRequest = new ItemUpdateRequest(item.getId(), "test123", "모자", 1500, "멋진 모자!");
+        SignUpRequest signUpRequest = new SignUpRequest("test123", "testPassword", "테스트유저", "H1231", "01011111111");
+        ItemSaveRequest itemSaveRequest = new ItemSaveRequest("가방", 1000,"2023년도에 구매한 가방입니다");
+        User user = userService.createAccount(signUpRequest);
+        Item item = itemService.saveItem(user.getUserId(), itemSaveRequest);
+        ItemUpdateRequest itemUpdateRequest = new ItemUpdateRequest("test123", "모자", 1500, "멋진 모자!");
 
-        itemService.updateItem(itemUpdateRequest);
+        itemService.updateItem(user.getUserId(), item.getId(), itemUpdateRequest);
 
         assertThat(itemService.findItemById(item.getId()).getItemName()).isEqualTo("모자");
     }
