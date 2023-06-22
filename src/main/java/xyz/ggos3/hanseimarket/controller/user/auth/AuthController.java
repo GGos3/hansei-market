@@ -21,7 +21,7 @@ public class AuthController {
 
     @PostMapping("/validate")
     public ApiResponse validateId(@RequestBody ValidateUserIdRequest request) {
-        userService.validateUser(request.getUserId());
+        userService.validateUser(request.userId());
         return ApiResponse.success("사용할 수 있는 ID 입니다");
     }
 

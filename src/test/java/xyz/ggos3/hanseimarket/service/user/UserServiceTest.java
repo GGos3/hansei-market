@@ -45,11 +45,11 @@ class UserServiceTest {
 
         userService.createAccount(request);
 
-        User user = userRepository.findByUserId(request.getUserId()).get();
-        AuthUser authUser = authUserRepository.findByUserId(request.getUserId()).get();
+        User user = userRepository.findByUserId(request.userId()).get();
+        AuthUser authUser = authUserRepository.findByUserId(request.userId()).get();
 
         // 저장된 User의 Id 가 request의 Id와 같은지 검증
-        assertThat(user.getUserId()).isEqualTo(request.getUserId());
+        assertThat(user.getUserId()).isEqualTo(request.userId());
         // 로그인 전용 User의 user필드가가 user의 id와 같은지 검증
         assertThat(authUser.getUser().getId()).isEqualTo(user.getId());
     }
@@ -63,7 +63,7 @@ class UserServiceTest {
 
         User findUser = userService.findUser(user.getUserId());
 
-        assertThat(passwordEncoder.matches(request.getUserPassword(), findUser.getUserPassword())).isEqualTo(true);
+        assertThat(passwordEncoder.matches(request.userPassword(), findUser.getUserPassword())).isEqualTo(true);
     }
 
     @Test()

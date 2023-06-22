@@ -25,17 +25,17 @@ public class UserService {
     @Transactional
     public User createAccount(SignUpRequest request) {
         User newUser = new User(
-                request.getUserId(),
-                passwordEncoder.encode(request.getUserPassword()),
-                request.getName(),
-                request.getStudentCode(),
-                request.getPhoneNumber()
+                request.userId(),
+                passwordEncoder.encode(request.userPassword()),
+                request.name(),
+                request.studentCode(),
+                request.phoneNumber()
         );
         AuthUser newAuthUser = new AuthUser(newUser);
 
         validateUser(newUser.getUserId());
 
-        log.info("New User = {}", request.getUserId());
+        log.info("New User = {}", request.userId());
         authUserRepository.save(newAuthUser);
         return userRepository.save(newUser);
     }

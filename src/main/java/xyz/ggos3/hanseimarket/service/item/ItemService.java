@@ -24,13 +24,13 @@ public class ItemService {
 
     @Transactional
     public Item saveItem(ItemSaveRequest request) {
-        User requestUser = userService.findUser(request.getUserId());
+        User requestUser = userService.findUser(request.userId());
 
         Item newItem = new Item(
                 requestUser,
-                request.getItemName(),
-                request.getPrice(),
-                request.getDescription()
+                request.itemName(),
+                request.price(),
+                request.description()
         );
 
         return itemRepository.save(newItem);
@@ -38,23 +38,23 @@ public class ItemService {
 
     @Transactional
     public void updateItem(ItemUpdateRequest request) {
-        String userId = findItemById(request.getId()).getUser().getUserId();
+        String userId = findItemById(request.id()).getUser().getUserId();
 
-        if (!userId.equals(request.getUserId()))
+        if (!userId.equals(request.userId()))
             throw new IllegalArgumentException("게시글 수정은 본인만 할 수 있습니다.");
 
         itemRepository.updateItem(
-                request.getId(),
-                request.getItemName(),
-                request.getPrice(),
-                request.getDescription());
+                request.id(),
+                request.itemName(),
+                request.price(),
+                request.description());
     }
 
     @Transactional
     public Item updateStatus(ItemStatusUpdateRequest request) {
-        Long id = findItemById(request.getId()).getId();
+        Long id = findItemById(request.id()).getId();
 
-        itemRepository.updateStatus(id, request.getStatus());
+        itemRepository.updateStatus(id, request.status());
 
         return findItemById(id);
     }

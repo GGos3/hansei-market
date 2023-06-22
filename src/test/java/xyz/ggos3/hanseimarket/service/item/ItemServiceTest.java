@@ -54,10 +54,10 @@ class ItemServiceTest {
 
 
         // then
-        assertThat(item.getUser().getUserId()).isEqualTo(itemSaveRequest.getUserId());
-        assertThat(item.getItemName()).isEqualTo(itemSaveRequest.getItemName());
-        assertThat(item.getPrice()).isEqualTo(itemSaveRequest.getPrice());
-        assertThat(item.getDescription()).isEqualTo(itemSaveRequest.getDescription());
+        assertThat(item.getUser().getUserId()).isEqualTo(itemSaveRequest.userId());
+        assertThat(item.getItemName()).isEqualTo(itemSaveRequest.itemName());
+        assertThat(item.getPrice()).isEqualTo(itemSaveRequest.price());
+        assertThat(item.getDescription()).isEqualTo(itemSaveRequest.description());
     }
 
     @Test
@@ -80,10 +80,10 @@ class ItemServiceTest {
     @DisplayName("상품 상태 변경")
     void updateStatusTest() {
         // given
-        SignUpRequest signUPREquest = new SignUpRequest("test123", "testPassword", "테스트유저", "H1231", "010111111111");
+        SignUpRequest signUpRequest = new SignUpRequest("test123", "testPassword", "테스트유저", "H1231", "010111111111");
         ItemSaveRequest itemSaveRequest = new ItemSaveRequest("test123", "양말", 30000, "나이키 로고가 반대로 되어있는 중국산 나이크 양말");
 
-        userService.createAccount(signUPREquest);
+        userService.createAccount(signUpRequest);
         Item item = itemService.saveItem(itemSaveRequest);
 
         ItemStatusUpdateRequest itemStatusUpdateRequest = new ItemStatusUpdateRequest(item.getId(), ItemStatus.거래완료);

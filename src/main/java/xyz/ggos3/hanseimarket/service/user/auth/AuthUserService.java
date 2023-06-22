@@ -28,9 +28,9 @@ public class AuthUserService {
 
     @Transactional
     public SignInResponse signIn(SignInRequest request) {
-        AuthUser user = findByUserId(request.getId());
+        AuthUser user = findByUserId(request.id());
 
-        if (!passwordEncoder.matches(request.getPassword(), user.getPassword()))
+        if (!passwordEncoder.matches(request.password(), user.getPassword()))
             throw new IllegalArgumentException("아이디와 비밀번호가 일치하지 않습니다");
 
         log.info("userGetType={}", user.getUserType());

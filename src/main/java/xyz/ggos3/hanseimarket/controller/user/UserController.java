@@ -18,7 +18,7 @@ public class UserController {
     private final UserService userService;
     @PostMapping
     public ApiResponse showUserInfo(@RequestBody UserInfoRequest request) {
-        return ApiResponse.success(userService.findUserInfo(request.getUserId()));
+        return ApiResponse.success(userService.findUserInfo(request.userId()));
     }
 }
 
