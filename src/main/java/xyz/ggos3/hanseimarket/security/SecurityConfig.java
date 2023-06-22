@@ -18,6 +18,7 @@ import xyz.ggos3.hanseimarket.security.jwt.JwtAuthenticationFilter;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
     private final CorsFilter corsFilter;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
@@ -29,11 +30,10 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable) // Bearer 방식 사용 (Token 전달 사용)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilter(corsFilter)
-                .authorizeHttpRequests(req -> {
-                    req.requestMatchers("/admin/**").hasRole("admin");
-                    req.requestMatchers("/", "/item/**", "/login/**", "/user/register", "/user/validate").permitAll();
-                    req.anyRequest().authenticated();
-                })
+                .authorizeHttpRequests(req -> req
+                        .requestMatchers("/auth/**").permitAll()
+                        .anyRequest().authenticated()
+                )
                 .addFilterBefore(jwtAuthenticationFilter, BasicAuthenticationFilter.class)
                 .build();
     }
