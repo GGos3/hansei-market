@@ -22,6 +22,8 @@ public class Item {
     private int likeCount = 0;
     private int price = 0;
     private int view = 0;
+
+    @Enumerated(EnumType.STRING)
     private ItemStatus status = ItemStatus.판매중;
 
     @CreationTimestamp
