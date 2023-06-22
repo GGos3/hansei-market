@@ -9,9 +9,9 @@ import xyz.ggos3.hanseimarket.domain.item.like.LikedItem;
 import xyz.ggos3.hanseimarket.domain.item.like.LikedItemRepository;
 import xyz.ggos3.hanseimarket.domain.user.User;
 import xyz.ggos3.hanseimarket.domain.user.UserRepository;
-import xyz.ggos3.hanseimarket.domain.user.login.LoginUserRepository;
+import xyz.ggos3.hanseimarket.domain.user.auth.AuthUserRepository;
 import xyz.ggos3.hanseimarket.dto.item.request.ItemSaveRequest;
-import xyz.ggos3.hanseimarket.dto.user.request.UserCreateRequest;
+import xyz.ggos3.hanseimarket.dto.user.auth.request.SignUpRequest;
 import xyz.ggos3.hanseimarket.service.item.ItemService;
 import xyz.ggos3.hanseimarket.service.user.UserService;
 
@@ -26,22 +26,22 @@ class LikedItemServiceTest {
     private final UserRepository userRepository;
     private final ItemService itemService;
     private final LikedItemRepository likedItemRepository;
-    private final LoginUserRepository loginUserRepository;
+    private final AuthUserRepository authUserRepository;
 
     @Autowired
-    public LikedItemServiceTest(LikedItemService likedItemService, UserService userService, ItemRepository itemRepository, UserRepository userRepository, ItemService itemService, LikedItemRepository likedItemRepository, LoginUserRepository loginUserRepository) {
+    public LikedItemServiceTest(LikedItemService likedItemService, UserService userService, ItemRepository itemRepository, UserRepository userRepository, ItemService itemService, LikedItemRepository likedItemRepository, AuthUserRepository authUserRepository) {
         this.likedItemService = likedItemService;
         this.userService = userService;
         this.itemRepository = itemRepository;
         this.userRepository = userRepository;
         this.itemService = itemService;
         this.likedItemRepository = likedItemRepository;
-        this.loginUserRepository = loginUserRepository;
+        this.authUserRepository = authUserRepository;
     }
 
     @AfterEach
     void clear() {
-        loginUserRepository.deleteAll();
+        authUserRepository.deleteAll();
         likedItemRepository.deleteAll();
         itemRepository.deleteAll();
         userRepository.deleteAll();
@@ -51,9 +51,9 @@ class LikedItemServiceTest {
     @DisplayName("찜 리스트 생성")
     void addLikedItemTest() {
         //give
-        UserCreateRequest userCreateRequest = new UserCreateRequest("test123", "testPassword", "테스트유저", "H1231", "01011111111");
+        SignUpRequest signUpRequest = new SignUpRequest("test123", "testPassword", "테스트유저", "H1231", "01011111111");
         ItemSaveRequest itemSaveRequest = new ItemSaveRequest("test123", "가방", 1000,"2023년도에 구매한 가방입니다");
-        User user = userService.createAccount(userCreateRequest);
+        User user = userService.createAccount(signUpRequest);
         Item item = itemService.saveItem(itemSaveRequest);
 
         //when
@@ -67,10 +67,10 @@ class LikedItemServiceTest {
     @Test
     @DisplayName("좋아요 증가")
     void increaseLikeTest() {
-        UserCreateRequest userCreateRequest = new UserCreateRequest("test123", "testPassword", "테스트유저", "H1231", "01011111111");
+        SignUpRequest signUpRequest = new SignUpRequest("test123", "testPassword", "테스트유저", "H1231", "01011111111");
         ItemSaveRequest itemSaveRequest = new ItemSaveRequest("test123", "가방", 1000,"2023년도에 구매한 가방입니다");
 
-        User user = userService.createAccount(userCreateRequest);
+        User user = userService.createAccount(signUpRequest);
         Item item = itemService.saveItem(itemSaveRequest);
 
         LikedItem likedItem = likedItemService.addLikedItem(user.getUserId(), item.getId());
