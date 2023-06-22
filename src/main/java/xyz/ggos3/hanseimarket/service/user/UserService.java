@@ -12,6 +12,9 @@ import xyz.ggos3.hanseimarket.domain.user.auth.AuthUser;
 import xyz.ggos3.hanseimarket.domain.user.auth.AuthUserRepository;
 import xyz.ggos3.hanseimarket.dto.user.auth.request.SignUpRequest;
 import xyz.ggos3.hanseimarket.dto.user.response.UserInfoResponse;
+import xyz.ggos3.hanseimarket.service.user.auth.AuthUserService;
+
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -20,6 +23,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final AuthUserRepository authUserRepository;
+    private final AuthUserService authUserService;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
@@ -42,8 +46,8 @@ public class UserService {
 
     @Transactional
     public UserInfoResponse findUserInfo(String userId) {
-        User user = findUser(userId);
-        return new UserInfoResponse(user);
+        return new UserInfoResponse(
+                findUser(authUserService.findByUuid(UUID.fromString(userId)).getUserId()));
     }
 
     @Transactional
