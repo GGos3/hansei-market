@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -21,6 +22,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Order(0)
 @Component
 @RequiredArgsConstructor
@@ -28,11 +30,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final TokenProvider tokenProvider;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String token = parseBearerToken(request);
-        User user = parseUserSpecification(token);
-        AbstractAuthenticationToken authenticated = UsernamePasswordAuthenticationToken.authenticated(user, token, user.getAuthorities());
-        authenticated.setDetails(new WebAuthenticationDetails(request));
-        SecurityContextHolder.getContext().setAuthentication(authenticated);
+        try {
+            String token = parseBearerToken(request);
+            User user = parseUserSpecification(token);
+            AbstractAuthenticationToken authenticated = UsernamePasswordAuthenticationToken.authenticated(user, token, user.getAuthorities());
+            authenticated.setDetails(new WebAuthenticationDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(authenticated);
+        } catch (Exception e) {
+            request.setAttribute("exception", e);
+        }
 
         filterChain.doFilter(request, response);
     }
@@ -50,6 +56,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 .map(tokenProvider::validateTokenAndGetSubject)
                 .orElse("anonymous:anonymous")
                 .split(":");
-        return new User(split[0], "", List.of(new SimpleGrantedAuthority(split[1])));
+
+        String userId = split[0];
+        String authority = split[1];
+        List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(authority));
+
+        return new User(userId, "", authorities);
     }
 }
