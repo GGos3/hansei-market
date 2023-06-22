@@ -11,6 +11,8 @@ import xyz.ggos3.hanseimarket.dto.user.auth.request.SignInRequest;
 import xyz.ggos3.hanseimarket.dto.user.auth.response.SignInResponse;
 import xyz.ggos3.hanseimarket.security.jwt.TokenProvider;
 
+import java.util.UUID;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -25,6 +27,11 @@ public class AuthUserService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
     }
 
+    @Transactional
+    public AuthUser findByUuid(UUID uuid) {
+        return authUserRepository.findByUuid(uuid)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
+    }
 
     @Transactional
     public SignInResponse signIn(SignInRequest request) {
@@ -34,7 +41,6 @@ public class AuthUserService {
             throw new IllegalArgumentException("아이디와 비밀번호가 일치하지 않습니다");
 
         log.info("userGetType={}", user.getUserType());
-
         String token = tokenProvider.createToken(String.format("%s:%s", user.getUuid(), user.getUserType()));
 
         return new SignInResponse(user.getUserId(), token);
