@@ -75,6 +75,6 @@ class LikedItemServiceTest {
 
         LikedItem likedItem = likedItemService.addLikedItem(user.getUserId(), item.getId());
 
-        assertThat(itemService.findItemById(user.getId()).getLikeCount()).isEqualTo(1);
+        assertThat(itemService.findItemById(item.getId()).getLikeCount()).isEqualTo(1);
     }
 }
