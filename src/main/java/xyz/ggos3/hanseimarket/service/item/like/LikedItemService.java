@@ -7,22 +7,27 @@ import xyz.ggos3.hanseimarket.domain.item.Item;
 import xyz.ggos3.hanseimarket.domain.item.like.LikedItem;
 import xyz.ggos3.hanseimarket.domain.item.like.LikedItemRepository;
 import xyz.ggos3.hanseimarket.domain.user.User;
+import xyz.ggos3.hanseimarket.dto.item.like.request.AddLikeItemRequest;
+import xyz.ggos3.hanseimarket.dto.user.response.UserLikedItemsResponse;
 import xyz.ggos3.hanseimarket.service.item.ItemService;
 import xyz.ggos3.hanseimarket.service.user.UserService;
+import xyz.ggos3.hanseimarket.service.user.auth.AuthUserService;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class LikedItemService {
+
     private final LikedItemRepository likedItemRepository;
     private final UserService userService;
     private final ItemService itemService;
+    private final AuthUserService authUserService;
 
     @Transactional
-    public LikedItem addLikedItem(String userId, Long itemId) {
-        User user = userService.findUser(userId);
-        Item item = itemService.findItemById(itemId);
+    public LikedItem addLikedItem(String userId, AddLikeItemRequest request) {
+        User user = authUserService.findByUuid(userId).getUser();
+        Item item = itemService.findItemById(request.itemId());
 
         LikedItem likedItem = new LikedItem(user, item);
 
@@ -39,15 +44,14 @@ public class LikedItemService {
     }
 
     @Transactional
-    public List<LikedItem> findLikedItemByUserId(String userId) {
-        User user = userService.findUser(userId);
-
-        List<LikedItem> likedItems = likedItemRepository.findByUser(user);
-
-        if (likedItems.isEmpty())
-            throw new IllegalArgumentException("찜 리스트가 비어있습니다.");
-
-        return likedItems;
+    public List<UserLikedItemsResponse> findLikedItemsByUserId(String userId) {
+        return likedItemRepository.findByUser(authUserService.findByUuid(userId).getUser())
+                .stream().map(item ->
+                        new UserLikedItemsResponse(
+                                item.getItem().getId(),
+                                item.getItem().getItemName()
+                        ))
+                .toList();
     }
 
     @Transactional
