@@ -1,14 +1,7 @@
 package xyz.ggos3.hanseimarket.dto.user.auth.response;
 
-import lombok.Getter;
-
-@Getter
-public class SignInResponse {
-    private String userId;
-    private String token;
-
-    public SignInResponse(String userId, String token) {
-        this.userId = userId;
-        this.token = token;
-    }
+public record SignInResponse(
+        String userId,
+        String token
+) {
 }
