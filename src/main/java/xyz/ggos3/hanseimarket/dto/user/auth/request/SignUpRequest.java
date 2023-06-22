@@ -1,10 +1,10 @@
-package xyz.ggos3.hanseimarket.dto.user.request;
+package xyz.ggos3.hanseimarket.dto.user.auth.request;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 @Getter
-public class UserCreateRequest {
+public class SignUpRequest {
 
     @NotNull
     private final String userId;
@@ -17,7 +17,7 @@ public class UserCreateRequest {
     @NotNull
     private final String phoneNumber;
 
-    public UserCreateRequest(String userId, String userPassword, String name, String studentCode, String phoneNumber) {
+    public SignUpRequest(String userId, String userPassword, String name, String studentCode, String phoneNumber) {
         this.userId = userId;
         this.userPassword = userPassword;
         this.name = name;

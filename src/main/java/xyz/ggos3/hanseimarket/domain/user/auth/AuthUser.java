@@ -1,4 +1,4 @@
-package xyz.ggos3.hanseimarket.domain.user.login;
+package xyz.ggos3.hanseimarket.domain.user.auth;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Entity
 @Getter
-public class LoginUser {
+public class AuthUser {
     @Id @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
 
@@ -22,15 +22,15 @@ public class LoginUser {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private UserType userType;
+    private UserType userType = UserType.USER;
 
     @Enumerated(EnumType.STRING)
     private UserStatus status;
 
-    public LoginUser() {
+    public AuthUser() {
     }
 
-    public LoginUser(User user) {
+    public AuthUser(User user) {
         this.user = user;
         this.userId = user.getUserId();
         this.password = user.getUserPassword();

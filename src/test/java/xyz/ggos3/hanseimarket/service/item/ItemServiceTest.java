@@ -7,11 +7,11 @@ import xyz.ggos3.hanseimarket.domain.item.Item;
 import xyz.ggos3.hanseimarket.domain.item.ItemRepository;
 import xyz.ggos3.hanseimarket.domain.item.ItemStatus;
 import xyz.ggos3.hanseimarket.domain.user.UserRepository;
-import xyz.ggos3.hanseimarket.domain.user.login.LoginUserRepository;
+import xyz.ggos3.hanseimarket.domain.user.auth.AuthUserRepository;
 import xyz.ggos3.hanseimarket.dto.item.request.ItemSaveRequest;
 import xyz.ggos3.hanseimarket.dto.item.request.ItemStatusUpdateRequest;
 import xyz.ggos3.hanseimarket.dto.item.request.ItemUpdateRequest;
-import xyz.ggos3.hanseimarket.dto.user.request.UserCreateRequest;
+import xyz.ggos3.hanseimarket.dto.user.auth.request.SignUpRequest;
 import xyz.ggos3.hanseimarket.service.user.UserService;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,21 +22,21 @@ class ItemServiceTest {
     private final UserService userService;
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
-    private final LoginUserRepository loginUserRepository;
+    private final AuthUserRepository authUserRepository;
 
     @Autowired
-    public ItemServiceTest(ItemService itemService, UserService userService, ItemRepository itemRepository, UserRepository userRepository, LoginUserRepository loginUserRepository) {
+    public ItemServiceTest(ItemService itemService, UserService userService, ItemRepository itemRepository, UserRepository userRepository, AuthUserRepository authUserRepository) {
         this.itemService = itemService;
         this.userService = userService;
         this.itemRepository = itemRepository;
         this.userRepository = userRepository;
-        this.loginUserRepository = loginUserRepository;
+        this.authUserRepository = authUserRepository;
     }
 
 
     @AfterEach
     void clear() {
-        loginUserRepository.deleteAll();
+        authUserRepository.deleteAll();
         itemRepository.deleteAll();
         userRepository.deleteAll();
     }
@@ -46,8 +46,8 @@ class ItemServiceTest {
     void createItemTest() {
         // given
         ItemSaveRequest itemSaveRequest = new ItemSaveRequest("test123", "가방", 1000,"2023년도에 구매한 가방입니다");
-        UserCreateRequest userCreateRequest = new UserCreateRequest("test123", "testPassword", "테스트유저", "H1231", "01011111111");
-        userService.createAccount(userCreateRequest);
+        SignUpRequest signUPREquest = new SignUpRequest("test123", "testPassword", "테스트유저", "H1231", "01011111111");
+        userService.createAccount(signUPREquest);
 
         // when
         Item item = itemService.saveItem(itemSaveRequest);
@@ -64,9 +64,9 @@ class ItemServiceTest {
     @DisplayName("조회수 카운트")
     void itemViewCountTest() {
         // given
-        UserCreateRequest userCreateRequest = new UserCreateRequest("test123", "testPassword", "테스트유저", "H1231", "01011111111");
+        SignUpRequest signUPREquest = new SignUpRequest("test123", "testPassword", "테스트유저", "H1231", "01011111111");
         ItemSaveRequest itemSaveRequest = new ItemSaveRequest("test123", "가방", 1000,"2023년도에 구매한 가방입니다");
-        userService.createAccount(userCreateRequest);
+        userService.createAccount(signUPREquest);
         Item item = itemService.saveItem(itemSaveRequest);
 
         // when
@@ -80,10 +80,10 @@ class ItemServiceTest {
     @DisplayName("상품 상태 변경")
     void updateStatusTest() {
         // given
-        UserCreateRequest userCreateRequest = new UserCreateRequest("test123", "testPassword", "테스트유저", "H1231", "010111111111");
+        SignUpRequest signUPREquest = new SignUpRequest("test123", "testPassword", "테스트유저", "H1231", "010111111111");
         ItemSaveRequest itemSaveRequest = new ItemSaveRequest("test123", "양말", 30000, "나이키 로고가 반대로 되어있는 중국산 나이크 양말");
 
-        userService.createAccount(userCreateRequest);
+        userService.createAccount(signUPREquest);
         Item item = itemService.saveItem(itemSaveRequest);
 
         ItemStatusUpdateRequest itemStatusUpdateRequest = new ItemStatusUpdateRequest(item.getId(), ItemStatus.거래완료);
@@ -98,9 +98,9 @@ class ItemServiceTest {
     @Test
     @DisplayName("상품 수정")
     void updateItemTest() {
-        UserCreateRequest userCreateRequest = new UserCreateRequest("test123", "testPassword", "테스트유저", "H1231", "01011111111");
+        SignUpRequest signUPREquest = new SignUpRequest("test123", "testPassword", "테스트유저", "H1231", "01011111111");
         ItemSaveRequest itemSaveRequest = new ItemSaveRequest("test123", "가방", 1000,"2023년도에 구매한 가방입니다");
-        userService.createAccount(userCreateRequest);
+        userService.createAccount(signUPREquest);
         Item item = itemService.saveItem(itemSaveRequest);
         ItemUpdateRequest itemUpdateRequest = new ItemUpdateRequest(item.getId(), "test123", "모자", 1500, "멋진 모자!");
 

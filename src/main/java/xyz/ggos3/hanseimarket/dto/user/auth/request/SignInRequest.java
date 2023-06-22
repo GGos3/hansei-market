@@ -1,4 +1,4 @@
-package xyz.ggos3.hanseimarket.dto.user.login.request;
+package xyz.ggos3.hanseimarket.dto.user.auth.request;
 
 import lombok.Getter;
 

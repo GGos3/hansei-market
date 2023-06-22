@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 import xyz.ggos3.hanseimarket.domain.user.User;
 import xyz.ggos3.hanseimarket.domain.user.UserRepository;
 import xyz.ggos3.hanseimarket.domain.user.UserStatus;
-import xyz.ggos3.hanseimarket.domain.user.login.LoginUser;
-import xyz.ggos3.hanseimarket.domain.user.login.LoginUserRepository;
-import xyz.ggos3.hanseimarket.dto.user.request.UserCreateRequest;
+import xyz.ggos3.hanseimarket.domain.user.auth.AuthUser;
+import xyz.ggos3.hanseimarket.domain.user.auth.AuthUserRepository;
+import xyz.ggos3.hanseimarket.dto.user.auth.request.SignUpRequest;
 import xyz.ggos3.hanseimarket.dto.user.response.UserInfoResponse;
 
 @Service
@@ -19,11 +19,11 @@ import xyz.ggos3.hanseimarket.dto.user.response.UserInfoResponse;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final LoginUserRepository loginUserRepository;
+    private final AuthUserRepository authUserRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public User createAccount(UserCreateRequest request) {
+    public User createAccount(SignUpRequest request) {
         User newUser = new User(
                 request.getUserId(),
                 passwordEncoder.encode(request.getUserPassword()),
@@ -31,12 +31,12 @@ public class UserService {
                 request.getStudentCode(),
                 request.getPhoneNumber()
         );
-        LoginUser newLoginUser = new LoginUser(newUser);
+        AuthUser newAuthUser = new AuthUser(newUser);
 
         validateUser(newUser.getUserId());
 
         log.info("New User = {}", request.getUserId());
-        loginUserRepository.save(newLoginUser);
+        authUserRepository.save(newAuthUser);
         return userRepository.save(newUser);
     }
 
