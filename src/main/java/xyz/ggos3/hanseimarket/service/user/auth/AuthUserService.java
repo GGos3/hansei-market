@@ -34,6 +34,12 @@ public class AuthUserService {
     }
 
     @Transactional
+    public AuthUser findByUuid(String uuid) {
+        return authUserRepository.findByUuid(UUID.fromString(uuid))
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
+    }
+
+    @Transactional
     public SignInResponse signIn(SignInRequest request) {
         AuthUser user = findByUserId(request.id());
 
