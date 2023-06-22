@@ -10,7 +10,9 @@ import xyz.ggos3.hanseimarket.domain.user.User;
 import xyz.ggos3.hanseimarket.dto.item.request.ItemSaveRequest;
 import xyz.ggos3.hanseimarket.dto.item.request.ItemStatusUpdateRequest;
 import xyz.ggos3.hanseimarket.dto.item.request.ItemUpdateRequest;
+import xyz.ggos3.hanseimarket.dto.item.response.ItemResponse;
 import xyz.ggos3.hanseimarket.service.user.UserService;
+import xyz.ggos3.hanseimarket.service.user.auth.AuthUserService;
 
 import java.util.List;
 
@@ -21,10 +23,11 @@ public class ItemService {
 
     private final ItemRepository itemRepository;
     private final UserService userService;
+    private final AuthUserService authUserService;
 
     @Transactional
-    public Item saveItem(ItemSaveRequest request) {
-        User requestUser = userService.findUser(request.userId());
+    public Item saveItem(String userId, ItemSaveRequest request) {
+        User requestUser = authUserService.findByUuid(userId).getUser();
 
         Item newItem = new Item(
                 requestUser,
@@ -37,41 +40,50 @@ public class ItemService {
     }
 
     @Transactional
-    public void updateItem(ItemUpdateRequest request) {
-        String userId = findItemById(request.id()).getUser().getUserId();
-
-        if (!userId.equals(request.userId()))
-            throw new IllegalArgumentException("게시글 수정은 본인만 할 수 있습니다.");
-
-        itemRepository.updateItem(
-                request.id(),
-                request.itemName(),
-                request.price(),
-                request.description());
-    }
-
-    @Transactional
-    public Item updateStatus(ItemStatusUpdateRequest request) {
-        Long id = findItemById(request.id()).getId();
-
-        itemRepository.updateStatus(id, request.status());
-
-        return findItemById(id);
-    }
-
-    @Transactional
-    public Item findItemByName(String itemName) {
-        return itemRepository.findByItemName(itemName)
-                .orElseThrow(() -> new IllegalArgumentException("이름에 맞는 item이 없습니다."));
-    }
-
-    @Transactional
     public Item findItemById(Long id) {
         Item findItem = itemRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("id에 맞는 item이 없습니다."));
         findItem.viewCount();
 
         return findItem;
+    }
+
+    @Transactional
+    public Item updateItem(String userId, Long itemId, ItemUpdateRequest request) {
+        Long id = validateUserIdIsEqualToItemUser(userId, itemId).getId();
+
+        itemRepository.updateItem(
+                id,
+                request.itemName(),
+                request.price(),
+                request.description());
+
+        return findItemById(id);
+    }
+
+    @Transactional
+    public Item updateStatus(String userId, Long itemId, ItemStatusUpdateRequest request) {
+        Long id = validateUserIdIsEqualToItemUser(userId, itemId).getId();
+
+        itemRepository.updateStatus(id, request.status());
+
+        return findItemById(id);
+    }
+
+    private Item validateUserIdIsEqualToItemUser(String userId, Long itemId) {
+        Item item = findItemById(itemId);
+        User user = authUserService.findByUuid(userId).getUser();
+
+        if (!item.getUser().getUserId().equals(user.getUserId()))
+            throw new IllegalArgumentException("게시글 수정은 본인만 할 수 있습니다.");
+
+        return item;
+    }
+
+    @Transactional
+    public Item findItemByName(String itemName) {
+        return itemRepository.findByItemName(itemName)
+                .orElseThrow(() -> new IllegalArgumentException("이름에 맞는 item이 없습니다."));
     }
 
     @Transactional
@@ -91,7 +103,9 @@ public class ItemService {
     }
 
     @Transactional
-    public List<Item> findAll() {
-        return itemRepository.findAll();
+    public List<ItemResponse> findAll() {
+        return itemRepository.findAll().stream()
+                .map(ItemResponse::new)
+                .toList();
     }
 }
