@@ -11,10 +11,9 @@ import xyz.ggos3.hanseimarket.domain.user.UserStatus;
 import xyz.ggos3.hanseimarket.domain.user.auth.AuthUser;
 import xyz.ggos3.hanseimarket.domain.user.auth.AuthUserRepository;
 import xyz.ggos3.hanseimarket.dto.user.auth.request.SignUpRequest;
+import xyz.ggos3.hanseimarket.dto.user.response.OtherUserInfoResponse;
 import xyz.ggos3.hanseimarket.dto.user.response.UserInfoResponse;
 import xyz.ggos3.hanseimarket.service.user.auth.AuthUserService;
-
-import java.util.UUID;
 
 @Service
 @Slf4j
@@ -47,7 +46,13 @@ public class UserService {
     @Transactional
     public UserInfoResponse findUserInfo(String userId) {
         return new UserInfoResponse(
-                findUser(authUserService.findByUuid(UUID.fromString(userId)).getUserId()));
+                findUser(authUserService.findByUuid(userId).getUserId()));
+    }
+
+    @Transactional
+    public OtherUserInfoResponse findOtherUserInfo(String userId) {
+        return new OtherUserInfoResponse(
+                findUser(authUserService.findByUserId(userId).getUserId()));
     }
 
     @Transactional
@@ -58,13 +63,20 @@ public class UserService {
     }
 
     @Transactional
+    public User findDisableUser(String userId) {
+        return userRepository.findByUserId(userId)
+                .filter(user -> user.getStatus().equals(UserStatus.disable))
+                .orElseThrow(() -> new IllegalArgumentException("비활성화된 유저가 없습니다."));
+    }
+
+    @Transactional
     public void disableUser(String userId) {
         userRepository.updateUserStatus(findUser(userId).getId(), UserStatus.disable);
     }
 
     @Transactional
     public void enableUser(String userId) {
-        userRepository.updateUserStatus(findUser(userId).getId(), UserStatus.enable);
+        userRepository.updateUserStatus(findDisableUser(userId).getId(), UserStatus.enable);
     }
 
     @Transactional
