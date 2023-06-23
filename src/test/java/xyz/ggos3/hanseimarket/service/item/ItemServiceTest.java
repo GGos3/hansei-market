@@ -8,12 +8,14 @@ import xyz.ggos3.hanseimarket.domain.item.ItemRepository;
 import xyz.ggos3.hanseimarket.domain.item.ItemStatus;
 import xyz.ggos3.hanseimarket.domain.user.User;
 import xyz.ggos3.hanseimarket.domain.user.UserRepository;
+import xyz.ggos3.hanseimarket.domain.user.auth.AuthUser;
 import xyz.ggos3.hanseimarket.domain.user.auth.AuthUserRepository;
 import xyz.ggos3.hanseimarket.dto.item.request.ItemSaveRequest;
 import xyz.ggos3.hanseimarket.dto.item.request.ItemStatusUpdateRequest;
 import xyz.ggos3.hanseimarket.dto.item.request.ItemUpdateRequest;
 import xyz.ggos3.hanseimarket.dto.user.auth.request.SignUpRequest;
 import xyz.ggos3.hanseimarket.service.user.UserService;
+import xyz.ggos3.hanseimarket.service.user.auth.AuthUserService;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,14 +23,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ItemServiceTest {
     private final ItemService itemService;
     private final UserService userService;
+    private final AuthUserService authUserService;
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
     private final AuthUserRepository authUserRepository;
 
     @Autowired
-    public ItemServiceTest(ItemService itemService, UserService userService, ItemRepository itemRepository, UserRepository userRepository, AuthUserRepository authUserRepository) {
+    public ItemServiceTest(ItemService itemService, UserService userService, AuthUserService authUserService, ItemRepository itemRepository, UserRepository userRepository, AuthUserRepository authUserRepository) {
         this.itemService = itemService;
         this.userService = userService;
+        this.authUserService = authUserService;
         this.itemRepository = itemRepository;
         this.userRepository = userRepository;
         this.authUserRepository = authUserRepository;
@@ -49,9 +53,10 @@ class ItemServiceTest {
         ItemSaveRequest itemSaveRequest = new ItemSaveRequest("가방", 1000,"2023년도에 구매한 가방입니다");
         SignUpRequest signUpRequest = new SignUpRequest("test123", "testPassword", "테스트유저", "H1231", "01011111111");
         User user = userService.createAccount(signUpRequest);
+        AuthUser authUser = authUserService.findByUserId(user.getUserId());
 
         // when
-        Item item = itemService.saveItem(user.getUserId(), itemSaveRequest);
+        Item item = itemService.saveItem(authUser.getUuid().toString(), itemSaveRequest);
 
 
         // then
@@ -65,10 +70,11 @@ class ItemServiceTest {
     @DisplayName("조회수 카운트")
     void itemViewCountTest() {
         // given
-        SignUpRequest signUPREquest = new SignUpRequest("test123", "testPassword", "테스트유저", "H1231", "01011111111");
+        SignUpRequest signUpRequest = new SignUpRequest("test123", "testPassword", "테스트유저", "H1231", "01011111111");
         ItemSaveRequest itemSaveRequest = new ItemSaveRequest("가방", 1000,"2023년도에 구매한 가방입니다");
-        User user = userService.createAccount(signUPREquest);
-        Item item = itemService.saveItem(user.getUserId(), itemSaveRequest);
+        User user = userService.createAccount(signUpRequest);
+        AuthUser authUser = authUserService.findByUserId(user.getUserId());
+        Item item = itemService.saveItem(authUser.getUuid().toString(), itemSaveRequest);
 
         // when
         Item findItem = itemService.findItemById(item.getId());
@@ -85,12 +91,13 @@ class ItemServiceTest {
         ItemSaveRequest itemSaveRequest = new ItemSaveRequest("양말", 30000, "나이키 로고가 반대로 되어있는 중국산 나이크 양말");
 
         User user = userService.createAccount(signUpRequest);
-        Item item = itemService.saveItem(user.getUserId(), itemSaveRequest);
+        AuthUser authUser = authUserService.findByUserId(user.getUserId());
+        Item item = itemService.saveItem(authUser.getUuid().toString(), itemSaveRequest);
 
         ItemStatusUpdateRequest itemStatusUpdateRequest = new ItemStatusUpdateRequest(ItemStatus.거래완료);
 
         // when
-        itemService.updateStatus(user.getUserId(), item.getId(), itemStatusUpdateRequest);
+        itemService.updateStatus(authUser.getUuid().toString(), item.getId(), itemStatusUpdateRequest);
 
         // then
         assertThat(itemService.findItemById(item.getId()).getStatus()).isEqualTo(ItemStatus.거래완료);
@@ -102,10 +109,11 @@ class ItemServiceTest {
         SignUpRequest signUpRequest = new SignUpRequest("test123", "testPassword", "테스트유저", "H1231", "01011111111");
         ItemSaveRequest itemSaveRequest = new ItemSaveRequest("가방", 1000,"2023년도에 구매한 가방입니다");
         User user = userService.createAccount(signUpRequest);
-        Item item = itemService.saveItem(user.getUserId(), itemSaveRequest);
+        AuthUser authUser = authUserService.findByUserId(user.getUserId());
+        Item item = itemService.saveItem(authUser.getUuid().toString(), itemSaveRequest);
         ItemUpdateRequest itemUpdateRequest = new ItemUpdateRequest("test123", "모자", 1500, "멋진 모자!");
 
-        itemService.updateItem(user.getUserId(), item.getId(), itemUpdateRequest);
+        itemService.updateItem(authUser.getUuid().toString(), item.getId(), itemUpdateRequest);
 
         assertThat(itemService.findItemById(item.getId()).getItemName()).isEqualTo("모자");
     }

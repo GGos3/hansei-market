@@ -9,12 +9,14 @@ import xyz.ggos3.hanseimarket.domain.item.like.LikedItem;
 import xyz.ggos3.hanseimarket.domain.item.like.LikedItemRepository;
 import xyz.ggos3.hanseimarket.domain.user.User;
 import xyz.ggos3.hanseimarket.domain.user.UserRepository;
+import xyz.ggos3.hanseimarket.domain.user.auth.AuthUser;
 import xyz.ggos3.hanseimarket.domain.user.auth.AuthUserRepository;
 import xyz.ggos3.hanseimarket.dto.item.like.request.AddLikeItemRequest;
 import xyz.ggos3.hanseimarket.dto.item.request.ItemSaveRequest;
 import xyz.ggos3.hanseimarket.dto.user.auth.request.SignUpRequest;
 import xyz.ggos3.hanseimarket.service.item.ItemService;
 import xyz.ggos3.hanseimarket.service.user.UserService;
+import xyz.ggos3.hanseimarket.service.user.auth.AuthUserService;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -28,9 +30,10 @@ class LikedItemServiceTest {
     private final ItemService itemService;
     private final LikedItemRepository likedItemRepository;
     private final AuthUserRepository authUserRepository;
+    private final AuthUserService authUserService;
 
     @Autowired
-    public LikedItemServiceTest(LikedItemService likedItemService, UserService userService, ItemRepository itemRepository, UserRepository userRepository, ItemService itemService, LikedItemRepository likedItemRepository, AuthUserRepository authUserRepository) {
+    public LikedItemServiceTest(LikedItemService likedItemService, UserService userService, ItemRepository itemRepository, UserRepository userRepository, ItemService itemService, LikedItemRepository likedItemRepository, AuthUserRepository authUserRepository, AuthUserService authUserService) {
         this.likedItemService = likedItemService;
         this.userService = userService;
         this.itemRepository = itemRepository;
@@ -38,6 +41,7 @@ class LikedItemServiceTest {
         this.itemService = itemService;
         this.likedItemRepository = likedItemRepository;
         this.authUserRepository = authUserRepository;
+        this.authUserService = authUserService;
     }
 
     @AfterEach
@@ -55,11 +59,12 @@ class LikedItemServiceTest {
         SignUpRequest signUpRequest = new SignUpRequest("test123", "testPassword", "테스트유저", "H1231", "01011111111");
         ItemSaveRequest itemSaveRequest = new ItemSaveRequest("가방", 1000,"2023년도에 구매한 가방입니다");
         User user = userService.createAccount(signUpRequest);
-        Item item = itemService.saveItem(user.getUserId(), itemSaveRequest);
+        AuthUser authUser = authUserService.findByUserId(user.getUserId());
+        Item item = itemService.saveItem(authUser.getUuid().toString(), itemSaveRequest);
         AddLikeItemRequest request = new AddLikeItemRequest(item.getId());
 
         //when
-        LikedItem likedItem = likedItemService.addLikedItem(user.getUserId(), request);
+        LikedItem likedItem = likedItemService.addLikedItem(authUser.getUuid().toString(), request);
 
         //then
         assertThat(likedItemRepository.findById(likedItem.getId()).get().getUser().getUserId()).isEqualTo("test123");
@@ -72,10 +77,11 @@ class LikedItemServiceTest {
         SignUpRequest signUpRequest = new SignUpRequest("test123", "testPassword", "테스트유저", "H1231", "01011111111");
         ItemSaveRequest itemSaveRequest = new ItemSaveRequest("가방", 1000,"2023년도에 구매한 가방입니다");
         User user = userService.createAccount(signUpRequest);
-        Item item = itemService.saveItem(user.getUserId(), itemSaveRequest);
+        AuthUser authUser = authUserService.findByUserId(user.getUserId());
+        Item item = itemService.saveItem(authUser.getUuid().toString(), itemSaveRequest);
         AddLikeItemRequest request = new AddLikeItemRequest(item.getId());
 
-        LikedItem likedItem = likedItemService.addLikedItem(user.getUserId(), request);
+        LikedItem likedItem = likedItemService.addLikedItem(authUser.getUuid().toString(), request);
 
         assertThat(itemService.findItemById(item.getId()).getLikeCount()).isEqualTo(1);
     }
