@@ -28,12 +28,6 @@ public class AuthUserService {
     }
 
     @Transactional
-    public AuthUser findByUuid(UUID uuid) {
-        return authUserRepository.findByUuid(uuid)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
-    }
-
-    @Transactional
     public AuthUser findByUuid(String uuid) {
         return authUserRepository.findByUuid(UUID.fromString(uuid))
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
