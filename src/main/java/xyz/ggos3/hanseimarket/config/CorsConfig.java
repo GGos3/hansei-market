@@ -1,4 +1,4 @@
-package xyz.ggos3.hanseimarket.security;
+package xyz.ggos3.hanseimarket.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
