@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-@Builder
 public record ChatRoomResponse(
     UUID roomId,
     Long itemId,
@@ -16,6 +15,7 @@ public record ChatRoomResponse(
     List<ChatMessageResponse> messages,
     LocalDateTime createDate
 ) {
+    @Builder
     public ChatRoomResponse(ChatRoom chatRoom, List<ChatMessageResponse> messages) {
         this(
                 chatRoom.getId(),
