@@ -2,7 +2,7 @@ package xyz.ggos3.hanseimarket.service.chat;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.stereotype.Service;
@@ -10,6 +10,7 @@ import xyz.ggos3.hanseimarket.domain.chat.ChatRoom;
 import xyz.ggos3.hanseimarket.domain.chat.repository.ChatRoomRepository;
 import xyz.ggos3.hanseimarket.domain.item.Item;
 import xyz.ggos3.hanseimarket.domain.user.auth.AuthUser;
+import xyz.ggos3.hanseimarket.domain.user.auth.AuthUserRepository;
 import xyz.ggos3.hanseimarket.dto.chat.reqeuest.CreateRoomRequest;
 import xyz.ggos3.hanseimarket.dto.chat.response.ChatMessageResponse;
 import xyz.ggos3.hanseimarket.dto.chat.response.ChatRoomResponse;
@@ -17,17 +18,20 @@ import xyz.ggos3.hanseimarket.service.item.ItemService;
 import xyz.ggos3.hanseimarket.service.user.auth.AuthUserService;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ChatService {
 
     private final RedisMessageListenerContainer redisMessageListener;
-    private final RedisTemplate<String, Object> redisTemplate;
     private final AuthUserService authUserService;
     private final ItemService itemService;
     private final RedisSubscriber redisSubscriber;
     private final ChatRoomRepository chatRoomRepository;
+    private final AuthUserRepository authUserRepository;
 
     @Transactional
     public List<ChatRoom> findAllRoom() {
@@ -43,6 +47,21 @@ public class ChatService {
     public ChatRoomResponse getRoomInfo(UUID roomId) {
         return new ChatRoomResponse(findRoomByUuid(roomId), getRoomMessage(roomId));
     }
+
+    @Transactional
+    public List<ChatRoomResponse> getRoomByUser(String userId) {
+        AuthUser user = authUserService.findByUuid(userId);
+        return Optional.of(Stream.concat(
+                chatRoomRepository.findChatRoomsByStore(user).stream(),
+                chatRoomRepository.findChatRoomsByCustomer(user).stream())
+                .map(chatRoom ->
+                        new ChatRoomResponse(
+                                chatRoom, getRoomMessage(chatRoom.getId())))
+                        .distinct()
+                        .collect(Collectors.toList()))
+                .orElseThrow(IllegalAccessError::new);
+    }
+
 
     @Transactional
     public List<ChatMessageResponse> getRoomMessage(UUID rooId) {
@@ -63,13 +82,13 @@ public class ChatService {
                 .build();
 
         chatRoomRepository.save(chatRoom);
+        enterChatRoom(chatRoom.getId());
 
         return new ChatRoomResponse(chatRoom, getRoomMessage(chatRoom.getId()));
     }
 
     public void enterChatRoom(UUID roomId) {
         ChannelTopic topic = getTopic(roomId);
-
         redisMessageListener.addMessageListener(redisSubscriber, topic);
     }
 
