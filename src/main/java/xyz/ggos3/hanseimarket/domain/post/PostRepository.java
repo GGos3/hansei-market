@@ -1,7 +1,6 @@
-package xyz.ggos3.hanseimarket.domain.post.repository;
+package xyz.ggos3.hanseimarket.domain.post;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import xyz.ggos3.hanseimarket.domain.post.Post;
 import xyz.ggos3.hanseimarket.domain.user.auth.AuthUser;
 
 import java.util.Optional;
