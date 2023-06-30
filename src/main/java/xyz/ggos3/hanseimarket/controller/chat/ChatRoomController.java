@@ -20,8 +20,8 @@ public class ChatRoomController {
     private final ChatService chatService;
 
     @GetMapping("/rooms")
-    public ApiResponse rooms() {
-        return ApiResponse.success(chatService.findAllRoom());
+    public ApiResponse getRoomByUser(@AuthenticationPrincipal User user) {
+        return ApiResponse.success(chatService.getRoomByUser(user.getUsername()));
     }
 
     @PutMapping("/room")
@@ -35,8 +35,7 @@ public class ChatRoomController {
     }
 
     @PostMapping("/room/{roomId}")
-    public ApiResponse getRoomMessages(@AuthenticationPrincipal User user, @PathVariable UUID roomId) {
-        chatService.enterChatRoom(roomId);
+    public ApiResponse getRoomMessages(@PathVariable UUID roomId) {
         return ApiResponse.success("채팅방에 연결되었습니다.", roomId);
     }
 }
