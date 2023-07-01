@@ -13,6 +13,9 @@ import xyz.ggos3.hanseimarket.dto.post.comment.response.CommentResponse;
 import xyz.ggos3.hanseimarket.service.post.PostService;
 import xyz.ggos3.hanseimarket.service.user.auth.AuthUserService;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -35,6 +38,14 @@ public class CommentService {
     public Comment findCommentById(Long id) {
         return commentRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 댓글 입니다."));
+    }
+
+    @Transactional
+    public List<Comment> findCommentByPost(Long postId) {
+        return Optional.of(
+                commentRepository.findByPost(
+                        postService.findPostById(postId)))
+                .orElseThrow(() -> new IllegalArgumentException("댓글이 존재하지 않습니다."));
     }
 
     @Transactional
