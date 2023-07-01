@@ -15,6 +15,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     void updatePostName(Long id, String postName);
 
     @Modifying(clearAutomatically = true)
-    @Query("UPDATE Post p SET p.postBody = :postName WHERE p.id = :id")
+    @Query("UPDATE Post p SET p.postBody = :postBody WHERE p.id = :id")
     void updatePostBody(Long id, String postBody);
 }
