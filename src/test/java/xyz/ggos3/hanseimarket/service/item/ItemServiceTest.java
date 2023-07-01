@@ -4,15 +4,13 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import xyz.ggos3.hanseimarket.domain.item.Item;
-import xyz.ggos3.hanseimarket.domain.item.ItemRepository;
 import xyz.ggos3.hanseimarket.domain.item.ItemStatus;
 import xyz.ggos3.hanseimarket.domain.user.User;
-import xyz.ggos3.hanseimarket.domain.user.UserRepository;
 import xyz.ggos3.hanseimarket.domain.user.auth.AuthUser;
-import xyz.ggos3.hanseimarket.domain.user.auth.AuthUserRepository;
 import xyz.ggos3.hanseimarket.dto.item.request.ItemSaveRequest;
 import xyz.ggos3.hanseimarket.dto.item.request.ItemStatusUpdateRequest;
 import xyz.ggos3.hanseimarket.dto.item.request.ItemUpdateRequest;
+import xyz.ggos3.hanseimarket.dto.item.response.ItemResponse;
 import xyz.ggos3.hanseimarket.dto.user.auth.request.SignUpRequest;
 import xyz.ggos3.hanseimarket.service.user.UserService;
 import xyz.ggos3.hanseimarket.service.user.auth.AuthUserService;
@@ -21,29 +19,23 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 class ItemServiceTest {
+
     private final ItemService itemService;
     private final UserService userService;
     private final AuthUserService authUserService;
-    private final ItemRepository itemRepository;
-    private final UserRepository userRepository;
-    private final AuthUserRepository authUserRepository;
 
     @Autowired
-    public ItemServiceTest(ItemService itemService, UserService userService, AuthUserService authUserService, ItemRepository itemRepository, UserRepository userRepository, AuthUserRepository authUserRepository) {
+    public ItemServiceTest(ItemService itemService, UserService userService, AuthUserService authUserService) {
         this.itemService = itemService;
         this.userService = userService;
         this.authUserService = authUserService;
-        this.itemRepository = itemRepository;
-        this.userRepository = userRepository;
-        this.authUserRepository = authUserRepository;
     }
 
 
     @AfterEach
     void clear() {
-        authUserRepository.deleteAll();
-        itemRepository.deleteAll();
-        userRepository.deleteAll();
+        itemService.clearAll();
+        userService.clearAll();
     }
 
     @Test
@@ -77,10 +69,10 @@ class ItemServiceTest {
         Item item = itemService.saveItem(authUser.getUuid().toString(), itemSaveRequest);
 
         // when
-        Item findItem = itemService.findItemById(item.getId());
+        ItemResponse itemResponse = itemService.getItem(item.getId());
 
         // then
-        assertThat(findItem.getView()).isEqualTo(1);
+        assertThat(itemResponse.view()).isEqualTo(1);
     }
 
     @Test

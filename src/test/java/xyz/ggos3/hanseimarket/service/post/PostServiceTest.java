@@ -13,8 +13,8 @@ import xyz.ggos3.hanseimarket.dto.item.request.ItemSaveRequest;
 import xyz.ggos3.hanseimarket.dto.post.request.PostSaveRequest;
 import xyz.ggos3.hanseimarket.dto.user.auth.request.SignUpRequest;
 import xyz.ggos3.hanseimarket.service.item.ItemService;
-import xyz.ggos3.hanseimarket.service.user.UserServiceImpl;
-import xyz.ggos3.hanseimarket.service.user.auth.AuthUserImpl;
+import xyz.ggos3.hanseimarket.service.user.UserService;
+import xyz.ggos3.hanseimarket.service.user.auth.AuthUserService;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -22,12 +22,12 @@ import static org.assertj.core.api.Assertions.*;
 class PostServiceTest {
 
     private final PostService postService;
-    private final UserServiceImpl userService;
+    private final UserService userService;
     private final ItemService itemService;
-    private final AuthUserImpl authUserService;
+    private final AuthUserService authUserService;
 
     @Autowired
-    public PostServiceTest(PostService postService, UserServiceImpl userService, ItemService itemService, AuthUserImpl authUserService) {
+    public PostServiceTest(PostService postService, UserService userService, ItemService itemService, AuthUserService authUserService) {
         this.postService = postService;
         this.userService = userService;
         this.itemService = itemService;

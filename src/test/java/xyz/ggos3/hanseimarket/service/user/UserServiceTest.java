@@ -19,13 +19,13 @@ import static org.assertj.core.api.Assertions.*;
 @SpringBootTest
 class UserServiceTest {
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
     private final UserRepository userRepository;
     private final AuthUserRepository authUserRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceTest(UserService userService, UserRepository userRepository, AuthUserRepository authUserRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceTest(UserServiceImpl userService, UserRepository userRepository, AuthUserRepository authUserRepository, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.userRepository = userRepository;
         this.authUserRepository = authUserRepository;

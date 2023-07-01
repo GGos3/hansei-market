@@ -4,13 +4,10 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import xyz.ggos3.hanseimarket.domain.item.Item;
-import xyz.ggos3.hanseimarket.domain.item.ItemRepository;
 import xyz.ggos3.hanseimarket.domain.item.like.LikedItem;
 import xyz.ggos3.hanseimarket.domain.item.like.LikedItemRepository;
 import xyz.ggos3.hanseimarket.domain.user.User;
-import xyz.ggos3.hanseimarket.domain.user.UserRepository;
 import xyz.ggos3.hanseimarket.domain.user.auth.AuthUser;
-import xyz.ggos3.hanseimarket.domain.user.auth.AuthUserRepository;
 import xyz.ggos3.hanseimarket.dto.item.like.request.AddLikeItemRequest;
 import xyz.ggos3.hanseimarket.dto.item.request.ItemSaveRequest;
 import xyz.ggos3.hanseimarket.dto.user.auth.request.SignUpRequest;
@@ -23,33 +20,25 @@ import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 class LikedItemServiceTest {
-    private final LikedItemService likedItemService;
-    private final UserService userService;
-    private final ItemRepository itemRepository;
-    private final UserRepository userRepository;
     private final ItemService itemService;
-    private final LikedItemRepository likedItemRepository;
-    private final AuthUserRepository authUserRepository;
+    private final UserService userService;
     private final AuthUserService authUserService;
+    private final LikedItemService likedItemService;
+    private final LikedItemRepository likedItemRepository;
 
     @Autowired
-    public LikedItemServiceTest(LikedItemService likedItemService, UserService userService, ItemRepository itemRepository, UserRepository userRepository, ItemService itemService, LikedItemRepository likedItemRepository, AuthUserRepository authUserRepository, AuthUserService authUserService) {
-        this.likedItemService = likedItemService;
-        this.userService = userService;
-        this.itemRepository = itemRepository;
-        this.userRepository = userRepository;
+    public LikedItemServiceTest(LikedItemService likedItemService, UserService userService, ItemService itemService, LikedItemRepository likedItemRepository, AuthUserService authUserService) {
         this.itemService = itemService;
-        this.likedItemRepository = likedItemRepository;
-        this.authUserRepository = authUserRepository;
+        this.userService = userService;
         this.authUserService = authUserService;
+        this.likedItemService = likedItemService;
+        this.likedItemRepository = likedItemRepository;
     }
 
     @AfterEach
     void clear() {
-        authUserRepository.deleteAll();
-        likedItemRepository.deleteAll();
-        itemRepository.deleteAll();
-        userRepository.deleteAll();
+        itemService.clearAll();
+        userService.clearAll();
     }
 
     @Test
