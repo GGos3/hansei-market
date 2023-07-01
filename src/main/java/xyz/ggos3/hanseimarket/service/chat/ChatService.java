@@ -14,8 +14,8 @@ import xyz.ggos3.hanseimarket.domain.user.auth.AuthUserRepository;
 import xyz.ggos3.hanseimarket.dto.chat.reqeuest.CreateRoomRequest;
 import xyz.ggos3.hanseimarket.dto.chat.response.ChatMessageResponse;
 import xyz.ggos3.hanseimarket.dto.chat.response.ChatRoomResponse;
-import xyz.ggos3.hanseimarket.service.item.ItemService;
-import xyz.ggos3.hanseimarket.service.user.auth.AuthUserService;
+import xyz.ggos3.hanseimarket.service.item.ItemServiceImpl;
+import xyz.ggos3.hanseimarket.service.user.auth.AuthUserImpl;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -27,8 +27,8 @@ import java.util.stream.Stream;
 public class ChatService {
 
     private final RedisMessageListenerContainer redisMessageListener;
-    private final AuthUserService authUserService;
-    private final ItemService itemService;
+    private final AuthUserImpl authUserService;
+    private final ItemServiceImpl itemService;
     private final RedisSubscriber redisSubscriber;
     private final ChatRoomRepository chatRoomRepository;
     private final AuthUserRepository authUserRepository;

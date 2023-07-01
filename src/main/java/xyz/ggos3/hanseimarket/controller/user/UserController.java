@@ -13,9 +13,8 @@ import xyz.ggos3.hanseimarket.dto.ApiResponse;
 import xyz.ggos3.hanseimarket.dto.user.response.OtherUserInfoResponse;
 import xyz.ggos3.hanseimarket.dto.user.response.UserInfoResponse;
 import xyz.ggos3.hanseimarket.security.annotation.UserAuthorize;
-import xyz.ggos3.hanseimarket.service.item.like.LikedItemService;
-import xyz.ggos3.hanseimarket.service.user.UserService;
-import xyz.ggos3.hanseimarket.service.user.auth.AuthUserService;
+import xyz.ggos3.hanseimarket.service.user.UserServiceImpl;
+import xyz.ggos3.hanseimarket.service.user.auth.AuthUserImpl;
 
 @Tag(name = "회원관련 API")
 @Slf4j
@@ -25,8 +24,8 @@ import xyz.ggos3.hanseimarket.service.user.auth.AuthUserService;
 @RequestMapping("/user")
 public class UserController {
 
-    private final UserService userService;
-    private final AuthUserService authUserService;
+    private final UserServiceImpl userService;
+    private final AuthUserImpl authUserService;
 
     @Operation(summary = "유저의 정보", responses = {@io.swagger.v3.oas.annotations.responses.ApiResponse(content = @Content(schema = @Schema(implementation = UserInfoResponse.class)))})
     @PostMapping("/info")

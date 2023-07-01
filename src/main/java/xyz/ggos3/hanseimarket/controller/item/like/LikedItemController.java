@@ -34,6 +34,6 @@ public class LikedItemController {
     @Operation(summary = "유저의 찜 목록", responses = {@io.swagger.v3.oas.annotations.responses.ApiResponse(content = @Content(schema = @Schema(implementation = UserLikedItemsResponse.class)))})
     @PostMapping("/user")
     public ApiResponse getUserLikedItems(@AuthenticationPrincipal User user) {
-        return ApiResponse.success(likedItemService.findLikedItemsByUserId(user.getUsername()));
+        return ApiResponse.success(likedItemService.getLikedItemsByUserId(user.getUsername()));
     }
 }
