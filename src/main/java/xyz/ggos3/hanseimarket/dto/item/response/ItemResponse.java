@@ -24,7 +24,7 @@ public record ItemResponse(
                 item.getDescription(),
                 item.getLikeCount(),
                 item.getPrice(),
-                item.getPrice(),
+                item.getView(),
                 item.getStatus(),
                 item.getCreatedDate()
         );
