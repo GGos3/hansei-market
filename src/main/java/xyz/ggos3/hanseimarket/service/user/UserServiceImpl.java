@@ -13,7 +13,6 @@ import xyz.ggos3.hanseimarket.domain.user.auth.AuthUserRepository;
 import xyz.ggos3.hanseimarket.dto.user.auth.request.SignUpRequest;
 import xyz.ggos3.hanseimarket.dto.user.response.OtherUserInfoResponse;
 import xyz.ggos3.hanseimarket.dto.user.response.UserInfoResponse;
-import xyz.ggos3.hanseimarket.service.user.auth.AuthUserImpl;
 import xyz.ggos3.hanseimarket.service.user.auth.AuthUserService;
 
 @Service
@@ -87,6 +86,7 @@ public class UserServiceImpl implements UserService{
         userRepository.updateUserStatus(findUser(userId).getId(), UserStatus.disable);
     }
 
+    @Override
     @Transactional
     public void validateUser(String userId) {
         userRepository.findByUserId(userId)
