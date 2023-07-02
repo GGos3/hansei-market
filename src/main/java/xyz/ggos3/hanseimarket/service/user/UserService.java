@@ -23,4 +23,6 @@ public interface UserService {
     void disableUser(String userId);
 
     void clearAll();
+
+    void validateUser(String userId);
 }

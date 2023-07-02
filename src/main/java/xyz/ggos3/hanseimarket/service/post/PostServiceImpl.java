@@ -62,11 +62,11 @@ public class PostServiceImpl implements PostService{
         postRepository.delete(post);
     }
 
-    private Post isOwner(String userId, Long postId) {
-        authUserService.findByUuid(userId);
+    private Post isOwner(String uuid, Long postId) {
+        authUserService.findByUuid(uuid);
         Post post = findPostById(postId);
 
-        if (!post.getAuthUser().getUserId().equals(userId))
+        if (!post.getAuthUser().getUuid().toString().equals(uuid))
             throw new IllegalArgumentException("게시글 수정, 삭제는 본인만 할 수 있습니다");
         return post;
     }
