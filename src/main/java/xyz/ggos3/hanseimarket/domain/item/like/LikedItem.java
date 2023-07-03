@@ -2,8 +2,8 @@ package xyz.ggos3.hanseimarket.domain.item.like;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import xyz.ggos3.hanseimarket.domain.item.Item;
-import xyz.ggos3.hanseimarket.domain.user.User;
+import xyz.ggos3.hanseimarket.domain.item.domain.Item;
+import xyz.ggos3.hanseimarket.domain.user.domain.User;
 
 @Entity
 @Getter

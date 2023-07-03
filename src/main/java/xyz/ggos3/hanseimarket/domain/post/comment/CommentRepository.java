@@ -3,7 +3,7 @@ package xyz.ggos3.hanseimarket.domain.post.comment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import xyz.ggos3.hanseimarket.domain.post.Post;
+import xyz.ggos3.hanseimarket.domain.post.domain.Post;
 
 import java.util.List;
 

@@ -3,17 +3,18 @@ package xyz.ggos3.hanseimarket.service.item.like;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import xyz.ggos3.hanseimarket.domain.item.Item;
+import xyz.ggos3.hanseimarket.domain.item.domain.Item;
 import xyz.ggos3.hanseimarket.domain.item.like.LikedItem;
 import xyz.ggos3.hanseimarket.domain.item.like.LikedItemRepository;
-import xyz.ggos3.hanseimarket.domain.user.User;
-import xyz.ggos3.hanseimarket.domain.user.auth.AuthUser;
-import xyz.ggos3.hanseimarket.dto.item.like.request.AddLikeItemRequest;
-import xyz.ggos3.hanseimarket.dto.item.request.ItemSaveRequest;
-import xyz.ggos3.hanseimarket.dto.user.auth.request.SignUpRequest;
-import xyz.ggos3.hanseimarket.service.item.ItemService;
-import xyz.ggos3.hanseimarket.service.user.UserService;
-import xyz.ggos3.hanseimarket.service.user.auth.AuthUserService;
+import xyz.ggos3.hanseimarket.domain.item.like.service.LikedItemService;
+import xyz.ggos3.hanseimarket.domain.user.domain.User;
+import xyz.ggos3.hanseimarket.domain.user.auth.domain.AuthUser;
+import xyz.ggos3.hanseimarket.domain.item.like.dto.request.AddLikeItemRequest;
+import xyz.ggos3.hanseimarket.domain.item.dto.request.ItemSaveRequest;
+import xyz.ggos3.hanseimarket.domain.user.auth.dto.request.SignUpRequest;
+import xyz.ggos3.hanseimarket.domain.item.service.ItemService;
+import xyz.ggos3.hanseimarket.domain.user.service.UserService;
+import xyz.ggos3.hanseimarket.domain.user.auth.service.AuthUserService;
 
 import static org.assertj.core.api.Assertions.*;
 

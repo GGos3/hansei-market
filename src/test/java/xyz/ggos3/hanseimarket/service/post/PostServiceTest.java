@@ -5,15 +5,16 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import xyz.ggos3.hanseimarket.domain.post.Post;
-import xyz.ggos3.hanseimarket.domain.user.User;
-import xyz.ggos3.hanseimarket.domain.user.auth.AuthUser;
-import xyz.ggos3.hanseimarket.dto.post.request.PostNameUpdateRequest;
-import xyz.ggos3.hanseimarket.dto.post.request.PostSaveRequest;
-import xyz.ggos3.hanseimarket.dto.user.auth.request.SignUpRequest;
-import xyz.ggos3.hanseimarket.service.item.ItemService;
-import xyz.ggos3.hanseimarket.service.user.UserService;
-import xyz.ggos3.hanseimarket.service.user.auth.AuthUserService;
+import xyz.ggos3.hanseimarket.domain.post.domain.Post;
+import xyz.ggos3.hanseimarket.domain.post.service.PostService;
+import xyz.ggos3.hanseimarket.domain.user.domain.User;
+import xyz.ggos3.hanseimarket.domain.user.auth.domain.AuthUser;
+import xyz.ggos3.hanseimarket.domain.post.dto.request.PostNameUpdateRequest;
+import xyz.ggos3.hanseimarket.domain.post.dto.request.PostSaveRequest;
+import xyz.ggos3.hanseimarket.domain.user.auth.dto.request.SignUpRequest;
+import xyz.ggos3.hanseimarket.domain.item.service.ItemService;
+import xyz.ggos3.hanseimarket.domain.user.service.UserService;
+import xyz.ggos3.hanseimarket.domain.user.auth.service.AuthUserService;
 
 import static org.assertj.core.api.Assertions.*;
 

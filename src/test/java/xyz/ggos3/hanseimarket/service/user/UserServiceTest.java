@@ -7,12 +7,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import xyz.ggos3.hanseimarket.domain.user.User;
-import xyz.ggos3.hanseimarket.domain.user.UserRepository;
-import xyz.ggos3.hanseimarket.domain.user.UserStatus;
-import xyz.ggos3.hanseimarket.domain.user.auth.AuthUser;
-import xyz.ggos3.hanseimarket.domain.user.auth.AuthUserRepository;
-import xyz.ggos3.hanseimarket.dto.user.auth.request.SignUpRequest;
+import xyz.ggos3.hanseimarket.domain.user.domain.User;
+import xyz.ggos3.hanseimarket.domain.user.domain.UserRepository;
+import xyz.ggos3.hanseimarket.domain.user.domain.UserStatus;
+import xyz.ggos3.hanseimarket.domain.user.auth.domain.AuthUser;
+import xyz.ggos3.hanseimarket.domain.user.auth.domain.AuthUserRepository;
+import xyz.ggos3.hanseimarket.domain.user.service.UserServiceImpl;
+import xyz.ggos3.hanseimarket.domain.user.auth.dto.request.SignUpRequest;
 
 import static org.assertj.core.api.Assertions.*;
 

@@ -5,8 +5,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import xyz.ggos3.hanseimarket.domain.post.Post;
-import xyz.ggos3.hanseimarket.domain.user.auth.AuthUser;
+import xyz.ggos3.hanseimarket.domain.post.domain.Post;
+import xyz.ggos3.hanseimarket.domain.user.auth.domain.AuthUser;
 
 import java.sql.Timestamp;
 
