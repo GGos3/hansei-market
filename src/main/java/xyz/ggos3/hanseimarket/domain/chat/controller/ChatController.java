@@ -1,4 +1,4 @@
-package xyz.ggos3.hanseimarket.controller.chat;
+package xyz.ggos3.hanseimarket.domain.chat.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.RestController;
 import xyz.ggos3.hanseimarket.domain.chat.ChatMessage;
 import xyz.ggos3.hanseimarket.domain.chat.ChatRoom;
 import xyz.ggos3.hanseimarket.domain.chat.MessageType;
-import xyz.ggos3.hanseimarket.domain.user.auth.AuthUser;
-import xyz.ggos3.hanseimarket.dto.chat.reqeuest.ChatMessageRequest;
-import xyz.ggos3.hanseimarket.security.annotation.UserAuthorize;
-import xyz.ggos3.hanseimarket.service.chat.ChatService;
-import xyz.ggos3.hanseimarket.service.chat.RedisPublisher;
-import xyz.ggos3.hanseimarket.service.user.auth.AuthUserService;
+import xyz.ggos3.hanseimarket.domain.user.auth.domain.AuthUser;
+import xyz.ggos3.hanseimarket.domain.chat.dto.reqeuest.ChatMessageRequest;
+import xyz.ggos3.hanseimarket.common.security.annotation.UserAuthorize;
+import xyz.ggos3.hanseimarket.domain.chat.service.ChatService;
+import xyz.ggos3.hanseimarket.domain.chat.service.RedisPublisher;
+import xyz.ggos3.hanseimarket.domain.user.auth.service.AuthUserService;
 
 @UserAuthorize
 @RestController
