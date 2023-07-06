@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 public interface CommentService {
     CommentResponse getComment(Long id);
-
+    List<CommentResponse> getCommentsByPost(Post post);
     Comment findCommentById(Long id);
     List<Comment> findCommentByPost(Post post);
 
