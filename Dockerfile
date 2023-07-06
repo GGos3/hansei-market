@@ -1,10 +1,10 @@
-FROM eclipse-temurin:latest AS Builder
-WORKDIR /hansei-market
+FROM azul/zulu-openjdk:17 AS Builder
+WORKDIR /HanseiMarket
 COPY . .
 RUN chmod +x ./gradlew
 RUN ./gradlew bootJar
 
-FROM eclipse-temurin:latest
-COPY --from=Builder /hansei-market/build/libs/*.jar hansei-market.jar
+FROM azul/zulu-openjdk:17
+COPY --from=Builder /HanseiMarket/build/libs/*.jar HanseiMarket.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "/hansei-market.jar"]
+ENTRYPOINT ["java", "-jar", "/HanseiMarket.jar"]
