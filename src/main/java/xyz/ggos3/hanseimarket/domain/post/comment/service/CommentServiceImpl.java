@@ -37,6 +37,15 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
+    public List<CommentResponse> getCommentsByPost(Post post) {
+        return findCommentByPost(post).stream()
+                .map(CommentResponse::new)
+                .toList();
+    }
+
+
+    @Override
+    @Transactional
     public Comment findCommentById(Long id) {
         return commentRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 댓글 입니다."));
