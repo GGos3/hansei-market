@@ -13,9 +13,12 @@ services:
     restart: always
 
   spring:
-    build: .
+    image: janpll0421/hansei-market:latest
+    container_name: hansei-market
     depends_on:
       - mysql
     environment:
       SPRING_PROFILES_ACTIVE: dev
+    ports:
+      - "8080:8080"
     restart: always
