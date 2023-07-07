@@ -1,7 +1,7 @@
 ## default
 spring:
   datasource:
-    url: 'jdbc:mysql://localhost:3306/hansei_market'
+    url: ${DATA_SOURCE:jdbc:mysql://localhost:3306/hansei_market}
     username: root
   jpa:
     hibernate:
@@ -36,8 +36,6 @@ spring:
   config:
     activate:
       on-profile: "dev"
-  datasource:
-    url: 'jdbc:mysql://mysql:3306/hansei_market'
 
 springdoc:
   packages-to-scan: xyz.ggos3.hanseimarket.domain
