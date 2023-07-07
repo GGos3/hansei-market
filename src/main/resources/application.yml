@@ -1,9 +1,8 @@
-
+## default
 spring:
   datasource:
     url: 'jdbc:mysql://localhost:3306/hansei_market'
     username: root
-
   jpa:
     hibernate:
       ddl-auto: create-drop
@@ -11,6 +10,34 @@ spring:
       hibernate:
         format_sql: true
         show_sql: true
+
+secret-key: ${SECRET-KEY:4c317822d38f619e9340860cfa56331c8a48eec404347547412fd820ff445798ac8de2cc406fc9fa0c4ccdbcbf942087309e905f5d57b02962c4af4e21e95933}
+expiration-hours: 1
+issuer: ggos3
+
+
+--- # product
+
+spring:
+  config:
+    activate:
+      on-profile: "product"
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: false
+        show_sql: false
+
+--- # dev
+
+spring:
+  config:
+    activate:
+      on-profile: "dev"
+  datasource:
+    url: 'jdbc:mysql://mysql:3306/hansei_market'
 
 springdoc:
   packages-to-scan: xyz.ggos3.hanseimarket.domain
@@ -25,3 +52,5 @@ springdoc:
     path: /api-docs/json
     groups:
       enabled: true
+
+---
