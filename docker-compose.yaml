@@ -19,6 +19,7 @@ services:
       - mysql
     environment:
       SPRING_PROFILES_ACTIVE: dev
+      DATA_SSOURCE: jdbc:mysql://mysql:3306/hansei_market
     ports:
       - "8080:8080"
     restart: always
