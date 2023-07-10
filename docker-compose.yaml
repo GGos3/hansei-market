@@ -1,7 +1,7 @@
 version: "3"
 services:
   mysql:
-    image: mysql:8.0.33
+    image: mysql:latest
     container_name: mysql-container
     environment:
       MYSQL_DATABASE: hansei_market
@@ -19,7 +19,7 @@ services:
       - mysql
     environment:
       SPRING_PROFILES_ACTIVE: dev
-      DATA_SSOURCE: jdbc:mysql://mysql:3306/hansei_market
+      DATA_SOURCE: jdbc:mysql://mysql:3306/hansei_market
     ports:
       - "8080:8080"
     restart: always
