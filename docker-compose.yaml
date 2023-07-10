@@ -2,7 +2,7 @@ version: "3"
 services:
   mysql:
     image: mysql:latest
-    container_name: mysql-container
+    container_name: mysql
     environment:
       MYSQL_DATABASE: hansei_market
       MYSQL_ALLOW_EMPTY_PASSWORD: true
@@ -12,7 +12,7 @@ services:
       - "3306:3306"
     restart: always
 
-  spring:
+  hansei_market:
     image: janpll0421/hansei-market:latest
     container_name: hansei-market
     depends_on:
