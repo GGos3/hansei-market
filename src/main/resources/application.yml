@@ -10,8 +10,6 @@ spring:
       hibernate:
         format_sql: true
         show_sql: true
-#    database: mysql
-#    database-platform: org.hibernate.dialect.MySQLDialect
 
 secret-key: ${SECRET-KEY:4c317822d38f619e9340860cfa56331c8a48eec404347547412fd820ff445798ac8de2cc406fc9fa0c4ccdbcbf942087309e905f5d57b02962c4af4e21e95933}
 expiration-hours: 1
