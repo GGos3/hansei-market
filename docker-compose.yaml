@@ -8,6 +8,10 @@ services:
       MYSQL_ALLOW_EMPTY_PASSWORD: true
     volumes:
       - ./db/data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 15s
+      retries: 10
     ports:
       - "3306:3306"
     restart: always
@@ -16,7 +20,8 @@ services:
     image: janpll0421/hansei-market:latest
     container_name: hansei-market
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: dev
       DATA_SOURCE: jdbc:mysql://mysql:3306/hansei_market
